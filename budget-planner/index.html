@@ -1,0 +1,798 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Family Budget Planner</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --teal: #1D9E75;
+    --teal-light: #E1F5EE;
+    --teal-mid: #9FE1CB;
+    --teal-dark: #0F6E56;
+    --red: #E24B4A;
+    --red-light: #FCEBEB;
+    --amber: #EF9F27;
+    --amber-light: #FAEEDA;
+    --blue: #378ADD;
+    --blue-light: #E6F1FB;
+    --purple: #7F77DD;
+    --purple-light: #EEEDFE;
+    --orange: #D85A30;
+    --orange-light: #FAECE7;
+    --gray-50: #F8F9FA;
+    --gray-100: #F1F3F4;
+    --gray-200: #E8EAED;
+    --gray-400: #9AA0A6;
+    --gray-600: #5F6368;
+    --gray-800: #3C4043;
+    --gray-900: #202124;
+    --font-main: 'DM Sans', sans-serif;
+    --font-display: 'DM Serif Display', serif;
+    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
+    --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
+    --shadow-hover: 0 8px 24px rgba(0,0,0,0.10), 0 3px 8px rgba(0,0,0,0.06);
+    --radius-sm: 8px;
+    --radius-md: 12px;
+    --radius-lg: 16px;
+    --radius-xl: 24px;
+  }
+
+  body {
+    font-family: var(--font-main);
+    background: var(--gray-50);
+    color: var(--gray-900);
+    min-height: 100vh;
+    -webkit-font-smoothing: antialiased;
+  }
+
+  /* HEADER */
+  .header {
+    background: linear-gradient(135deg, #0F6E56 0%, #1D9E75 50%, #2DC090 100%);
+    padding: 48px 24px 40px;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .header::before {
+    content: '';
+    position: absolute;
+    top: -60px; right: -60px;
+    width: 200px; height: 200px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.06);
+  }
+  .header::after {
+    content: '';
+    position: absolute;
+    bottom: -80px; left: -40px;
+    width: 240px; height: 240px;
+    border-radius: 50%;
+    background: rgba(255,255,255,0.04);
+  }
+  .header-icon {
+    font-size: 40px;
+    display: block;
+    margin-bottom: 12px;
+    position: relative; z-index: 1;
+  }
+  .header h1 {
+    font-family: var(--font-display);
+    font-size: 34px;
+    font-weight: 400;
+    color: #ffffff;
+    letter-spacing: -0.5px;
+    position: relative; z-index: 1;
+  }
+  .header p {
+    font-size: 15px;
+    color: rgba(255,255,255,0.80);
+    margin-top: 8px;
+    font-weight: 300;
+    position: relative; z-index: 1;
+  }
+
+  /* MAIN CONTAINER */
+  .container {
+    max-width: 780px;
+    margin: 0 auto;
+    padding: 32px 20px 60px;
+  }
+
+  /* SUMMARY DASHBOARD */
+  .summary-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 14px;
+    margin-bottom: 28px;
+  }
+  .summary-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 20px 18px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .summary-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+  .summary-card .card-icon {
+    width: 36px; height: 36px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 16px;
+    margin-bottom: 12px;
+  }
+  .summary-card .card-label {
+    font-size: 12px;
+    font-weight: 500;
+    color: var(--gray-400);
+    text-transform: uppercase;
+    letter-spacing: 0.6px;
+    margin-bottom: 6px;
+  }
+  .summary-card .card-value {
+    font-family: var(--font-display);
+    font-size: 26px;
+    font-weight: 400;
+    letter-spacing: -0.5px;
+    transition: color 0.4s;
+  }
+  .card-remaining .card-icon { background: var(--teal-light); }
+  .card-remaining .card-icon::after { content: '💵'; }
+  .card-remaining .card-value { color: var(--teal); }
+  .card-remaining.over-budget .card-value { color: var(--red); }
+  .card-savings .card-icon { background: var(--blue-light); }
+  .card-savings .card-icon::after { content: '📈'; }
+  .card-savings .card-value { color: var(--blue); }
+  .card-expenses .card-icon { background: var(--amber-light); }
+  .card-expenses .card-icon::after { content: '🧾'; }
+  .card-expenses .card-value { color: var(--amber); }
+
+  /* PULSE ANIMATION */
+  @keyframes pulse-green {
+    0%, 100% { box-shadow: var(--shadow-sm); }
+    50% { box-shadow: 0 0 0 4px rgba(29,158,117,0.15), var(--shadow-sm); }
+  }
+  @keyframes pulse-red {
+    0%, 100% { box-shadow: var(--shadow-sm); }
+    50% { box-shadow: 0 0 0 4px rgba(226,75,74,0.15), var(--shadow-sm); }
+  }
+  .card-remaining.under-budget { animation: pulse-green 2.5s ease-in-out infinite; }
+  .card-remaining.over-budget { animation: pulse-red 2s ease-in-out infinite; }
+
+  /* SPENDING BREAKDOWN */
+  .breakdown-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 24px 24px 20px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    margin-bottom: 28px;
+  }
+  .breakdown-title {
+    display: flex; align-items: center; gap: 10px;
+    font-size: 16px; font-weight: 600;
+    color: var(--gray-800);
+    margin-bottom: 20px;
+  }
+  .breakdown-row {
+    display: flex; align-items: center; gap: 12px;
+    margin-bottom: 12px;
+  }
+  .breakdown-label {
+    font-size: 13px;
+    color: var(--gray-600);
+    width: 110px;
+    flex-shrink: 0;
+    display: flex; align-items: center; gap: 6px;
+  }
+  .breakdown-bar-wrap {
+    flex: 1;
+    height: 8px;
+    background: var(--gray-100);
+    border-radius: 99px;
+    overflow: hidden;
+  }
+  .breakdown-bar {
+    height: 100%;
+    border-radius: 99px;
+    width: 0%;
+    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
+  }
+  .breakdown-amount {
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-800);
+    width: 68px;
+    text-align: right;
+    flex-shrink: 0;
+  }
+
+  /* SECTION CARDS */
+  .section-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    border-left-width: 4px;
+    margin-bottom: 18px;
+    transition: box-shadow 0.2s, transform 0.2s;
+  }
+  .section-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
+  .section-card.border-teal { border-left-color: var(--teal); }
+  .section-card.border-red { border-left-color: var(--red); }
+  .section-card.border-orange { border-left-color: var(--orange); }
+  .section-card.border-blue { border-left-color: var(--blue); }
+  .section-card.border-purple { border-left-color: var(--purple); }
+  .section-card.border-amber { border-left-color: var(--amber); }
+
+  .section-title {
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--gray-900);
+    margin-bottom: 20px;
+    display: flex; align-items: center; gap: 10px;
+  }
+
+  .field-group { margin-bottom: 16px; }
+  .field-group:last-of-type { margin-bottom: 0; }
+  .field-label {
+    display: block;
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--gray-600);
+    margin-bottom: 7px;
+  }
+  .input-wrap {
+    position: relative;
+    display: flex;
+    align-items: center;
+  }
+  .input-prefix {
+    position: absolute;
+    left: 14px;
+    font-size: 15px;
+    color: var(--gray-400);
+    font-weight: 500;
+    pointer-events: none;
+    z-index: 1;
+  }
+  .input-wrap input {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px 0 32px;
+    font-size: 15px;
+    font-family: var(--font-main);
+    font-weight: 400;
+    color: var(--gray-900);
+    background: var(--gray-50);
+    border: 1.5px solid var(--gray-200);
+    border-radius: var(--radius-sm);
+    outline: none;
+    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
+    -moz-appearance: textfield;
+  }
+  .input-wrap input::-webkit-inner-spin-button,
+  .input-wrap input::-webkit-outer-spin-button { -webkit-appearance: none; }
+  .input-wrap input::placeholder { color: var(--gray-400); }
+  .input-wrap input:hover { border-color: var(--gray-400); background: #fff; }
+  .input-wrap input:focus {
+    border-color: var(--teal);
+    background: #fff;
+    box-shadow: 0 0 0 3px rgba(29,158,117,0.12);
+  }
+
+  /* TOTAL ROW */
+  .total-row {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 18px;
+    padding-top: 16px;
+    border-top: 1px solid var(--gray-200);
+  }
+  .total-row span:first-child {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--gray-800);
+  }
+  .total-value {
+    font-family: var(--font-display);
+    font-size: 22px;
+    font-weight: 400;
+    color: var(--teal);
+    letter-spacing: -0.3px;
+  }
+
+  /* RESET BUTTON */
+  .reset-wrap {
+    text-align: center;
+    margin: 32px 0 24px;
+  }
+  .reset-btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 13px 32px;
+    font-family: var(--font-main);
+    font-size: 14px;
+    font-weight: 500;
+    color: var(--gray-600);
+    background: #fff;
+    border: 1.5px solid var(--gray-200);
+    border-radius: 99px;
+    cursor: pointer;
+    transition: all 0.2s;
+    letter-spacing: 0.1px;
+  }
+  .reset-btn:hover {
+    color: var(--red);
+    border-color: var(--red);
+    background: var(--red-light);
+    transform: scale(1.02);
+  }
+  .reset-btn:active { transform: scale(0.98); }
+
+  /* FOOTER */
+  .footer {
+    background: var(--gray-900);
+    color: rgba(255,255,255,0.65);
+    text-align: center;
+    padding: 24px;
+    font-size: 14px;
+    font-weight: 300;
+    letter-spacing: 0.2px;
+  }
+
+  /* QUICK WINS */
+  .quickwins-card {
+    background: #fff;
+    border-radius: var(--radius-lg);
+    padding: 24px;
+    box-shadow: var(--shadow-sm);
+    border: 1px solid var(--gray-200);
+    margin-bottom: 28px;
+    border-left: 4px solid var(--teal);
+  }
+  .quickwins-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 6px;
+  }
+  .quickwins-title {
+    font-size: 16px; font-weight: 600;
+    color: var(--gray-800);
+    display: flex; align-items: center; gap: 10px;
+  }
+  .quickwins-subtitle {
+    font-size: 13px;
+    color: var(--gray-400);
+    margin-bottom: 18px;
+  }
+  .qw-empty {
+    text-align: center;
+    padding: 28px 16px;
+    color: var(--gray-400);
+    font-size: 14px;
+    line-height: 1.6;
+  }
+  .qw-empty span { display: block; font-size: 28px; margin-bottom: 8px; }
+  .qw-list { display: flex; flex-direction: column; gap: 10px; }
+  .qw-item {
+    display: flex; align-items: flex-start; gap: 14px;
+    padding: 14px 16px;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--gray-200);
+    background: var(--gray-50);
+    transition: all 0.2s;
+    cursor: default;
+  }
+  .qw-item:hover { background: #fff; box-shadow: var(--shadow-sm); transform: translateX(2px); }
+  .qw-item.completed {
+    opacity: 0.5;
+    text-decoration: line-through;
+    background: var(--gray-100);
+  }
+  .qw-icon {
+    width: 34px; height: 34px; border-radius: 9px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 15px; flex-shrink: 0;
+  }
+  .qw-icon.green { background: var(--teal-light); }
+  .qw-icon.amber { background: var(--amber-light); }
+  .qw-icon.blue { background: var(--blue-light); }
+  .qw-icon.red { background: var(--red-light); }
+  .qw-icon.purple { background: var(--purple-light); }
+  .qw-body { flex: 1; }
+  .qw-tip {
+    font-size: 14px; font-weight: 500;
+    color: var(--gray-900);
+    margin-bottom: 3px;
+    line-height: 1.4;
+  }
+  .qw-detail {
+    font-size: 12px;
+    color: var(--gray-600);
+    line-height: 1.5;
+  }
+  .qw-savings {
+    font-size: 12px; font-weight: 600;
+    color: var(--teal);
+    background: var(--teal-light);
+    padding: 3px 9px;
+    border-radius: 99px;
+    white-space: nowrap;
+    flex-shrink: 0;
+    align-self: center;
+  }
+  .qw-savings.warn { color: var(--red); background: var(--red-light); }
+  .qw-done-btn {
+    background: none; border: none; cursor: pointer;
+    font-size: 16px; padding: 4px; flex-shrink: 0;
+    align-self: center; opacity: 0.4;
+    transition: opacity 0.2s, transform 0.15s;
+    border-radius: 50%;
+  }
+  .qw-done-btn:hover { opacity: 1; transform: scale(1.2); }
+  .qw-count {
+    font-size: 12px; font-weight: 500;
+    color: #fff;
+    background: var(--teal);
+    padding: 2px 8px;
+    border-radius: 99px;
+  }
+
+  @media (max-width: 600px) {
+    .summary-grid { grid-template-columns: 1fr; gap: 10px; }
+    .header h1 { font-size: 26px; }
+    .summary-card .card-value { font-size: 22px; }
+  }
+</style>
+</head>
+<body>
+
+<!-- HEADER -->
+<div class="header">
+  <span class="header-icon">🏠</span>
+  <h1>Family Budget Planner</h1>
+  <p>Take control of your family finances</p>
+</div>
+
+<div class="container">
+
+  <!-- SUMMARY DASHBOARD -->
+  <div class="summary-grid">
+    <div class="summary-card card-remaining" id="card-remaining">
+      <div class="card-icon"></div>
+      <div class="card-label">Remaining Monthly</div>
+      <div class="card-value" id="val-remaining">$0.00</div>
+    </div>
+    <div class="summary-card card-savings">
+      <div class="card-icon"></div>
+      <div class="card-label">Savings Rate</div>
+      <div class="card-value" id="val-savings-rate">0%</div>
+    </div>
+    <div class="summary-card card-expenses">
+      <div class="card-icon"></div>
+      <div class="card-label">Total Expenses</div>
+      <div class="card-value" id="val-expenses">$0.00</div>
+    </div>
+  </div>
+
+  <!-- SPENDING BREAKDOWN -->
+  <div class="breakdown-card">
+    <div class="breakdown-title">📊 Spending Breakdown</div>
+    <div class="breakdown-row">
+      <div class="breakdown-label">🏠 Housing</div>
+      <div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-housing" style="background:var(--red)"></div></div>
+      <div class="breakdown-amount" id="amt-housing">$0.00</div>
+    </div>
+    <div class="breakdown-row">
+      <div class="breakdown-label">🍽️ Food</div>
+      <div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-food" style="background:var(--orange)"></div></div>
+      <div class="breakdown-amount" id="amt-food">$0.00</div>
+    </div>
+    <div class="breakdown-row">
+      <div class="breakdown-label">🚗 Transport</div>
+      <div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-transport" style="background:var(--blue)"></div></div>
+      <div class="breakdown-amount" id="amt-transport">$0.00</div>
+    </div>
+    <div class="breakdown-row">
+      <div class="breakdown-label">👨‍👩‍👧 Family</div>
+      <div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-family" style="background:var(--purple)"></div></div>
+      <div class="breakdown-amount" id="amt-family">$0.00</div>
+    </div>
+    <div class="breakdown-row">
+      <div class="breakdown-label">💰 Savings</div>
+      <div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-savings" style="background:var(--teal)"></div></div>
+      <div class="breakdown-amount" id="amt-savings">$0.00</div>
+    </div>
+  </div>
+
+  <!-- HOUSEHOLD INCOME -->
+  <div class="section-card border-teal">
+    <div class="section-title">💵 Household Income</div>
+    <div class="field-group">
+      <label class="field-label">Primary Income</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="income-primary" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Secondary Income</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="income-secondary" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Other Income</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="income-other" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+    <div class="total-row">
+      <span>Total Income</span>
+      <span class="total-value" id="total-income">$0.00</span>
+    </div>
+  </div>
+
+  <!-- HOUSING -->
+  <div class="section-card border-red">
+    <div class="section-title">🏠 Housing</div>
+    <div class="field-group">
+      <label class="field-label">Rent / Mortgage</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="housing-rent" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Utilities</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="housing-utilities" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Internet</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="housing-internet" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+  </div>
+
+  <!-- FOOD -->
+  <div class="section-card border-orange">
+    <div class="section-title">🍽️ Food</div>
+    <div class="field-group">
+      <label class="field-label">Groceries</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="food-groceries" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Dining Out</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="food-dining" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+  </div>
+
+  <!-- TRANSPORTATION -->
+  <div class="section-card border-blue">
+    <div class="section-title">🚗 Transportation</div>
+    <div class="field-group">
+      <label class="field-label">Car Payment</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="trans-car" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Gas</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="trans-gas" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Insurance</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="trans-insurance" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+  </div>
+
+  <!-- FAMILY EXPENSES -->
+  <div class="section-card border-purple">
+    <div class="section-title">👨‍👩‍👧 Family Expenses</div>
+    <div class="field-group">
+      <label class="field-label">Childcare</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="family-childcare" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">School / Education</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="family-school" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Clothing</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="family-clothing" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Entertainment</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="family-entertainment" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+  </div>
+
+  <!-- FINANCIAL GOALS -->
+  <div class="section-card border-teal">
+    <div class="section-title">💰 Financial Goals</div>
+    <div class="field-group">
+      <label class="field-label">Savings</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="goal-savings" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Debt Payments</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="goal-debt" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+    <div class="field-group">
+      <label class="field-label">Emergency Fund</label>
+      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="goal-emergency" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    </div>
+  </div>
+
+  <!-- QUICK WINS -->
+  <div class="quickwins-card">
+    <div class="quickwins-header">
+      <div class="quickwins-title">⚡ Quick Wins</div>
+      <span class="qw-count" id="qw-count" style="display:none"></span>
+    </div>
+    <div class="quickwins-subtitle">Personalized tips based on your numbers</div>
+    <div id="qw-container">
+      <div class="qw-empty">
+        <span>💡</span>
+        Fill in your income and expenses above<br>to get personalized money-saving tips.
+      </div>
+    </div>
+  </div>
+
+  <!-- RESET -->
+  <div class="reset-wrap">
+    <button class="reset-btn" onclick="resetAll()">↺ Reset All Values</button>
+  </div>
+
+</div>
+
+<!-- FOOTER -->
+<div class="footer">Start fresh each month and take control of your family's financial future 💪</div>
+
+<script>
+function v(id) {
+  return parseFloat(document.getElementById(id).value) || 0;
+}
+function fmt(n) {
+  return '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
+}
+function pct(n) {
+  return Math.round(Math.max(0, Math.min(100, n))) + '%';
+}
+
+let dismissedWins = new Set();
+
+function getQuickWins(income, housing, food, transport, family, savingsGoals, remaining) {
+  const wins = [];
+  if (income === 0) return wins;
+
+  const housingPct = (housing / income) * 100;
+  const foodPct = (food / income) * 100;
+  const transportPct = (transport / income) * 100;
+  const diningOut = v('food-dining');
+  const entertainment = v('family-entertainment');
+  const savingsRate = (savingsGoals / income) * 100;
+  const gas = v('trans-gas');
+  const utilities = v('housing-utilities');
+  const clothing = v('family-clothing');
+
+  if (housingPct > 35) {
+    const excess = housing - (income * 0.30);
+    wins.push({ id: 'housing-high', icon: '🏠', color: 'red', tip: 'Housing exceeds 35% of income', detail: 'Financial experts recommend keeping housing under 30%. Consider refinancing, a roommate, or negotiating rent.', savings: fmt(excess) + '/mo to reclaim', warn: true });
+  }
+  if (diningOut > 0 && (diningOut / income) * 100 > 8) {
+    const target = income * 0.05;
+    wins.push({ id: 'dining-high', icon: '🍽️', color: 'amber', tip: 'Cut dining out by cooking 2 more meals/week', detail: 'Dining out accounts for over 8% of your income. Meal prepping on Sundays can save hundreds monthly.', savings: fmt(diningOut - target) + '/mo potential' });
+  }
+  if (savingsRate < 10 && income > 0) {
+    const target = income * 0.10;
+    wins.push({ id: 'savings-low', icon: '💰', color: 'green', tip: 'Boost savings to the 10% benchmark', detail: 'You\'re saving less than 10% of income. Even a small auto-transfer each payday adds up fast.', savings: fmt(target - savingsGoals) + '/mo to goal' });
+  }
+  if (entertainment > 0 && entertainment > income * 0.05) {
+    wins.push({ id: 'entertainment', icon: '🎮', color: 'purple', tip: 'Audit streaming & subscription services', detail: 'Entertainment is above 5% of income. Cancel 1–2 unused subscriptions — the average family wastes $50+/mo.', savings: '~$50+/mo' });
+  }
+  if (utilities > 0 && utilities > 300) {
+    wins.push({ id: 'utilities', icon: '💡', color: 'amber', tip: 'Lower utility bills with simple swaps', detail: 'LED bulbs, a smart thermostat, and unplugging idle devices can reduce utility bills by 15–20%.', savings: fmt(utilities * 0.17) + '/mo avg' });
+  }
+  if (gas > 0 && gas > 200) {
+    wins.push({ id: 'gas', icon: '⛽', color: 'blue', tip: 'Use GasBuddy or pay with cashback cards', detail: 'Apps like GasBuddy find the cheapest nearby stations. A cashback card on gas adds 3–5% back automatically.', savings: fmt(gas * 0.04) + '/mo back' });
+  }
+  if (clothing > 0 && clothing > income * 0.04) {
+    wins.push({ id: 'clothing', icon: '👕', color: 'blue', tip: 'Shop end-of-season sales & secondhand', detail: 'Clothing is above 4% of income. Thrift stores and seasonal clearance can cut clothing costs by 50–70%.', savings: fmt(clothing * 0.50) + '/mo avg' });
+  }
+  if (remaining > 200 && savingsGoals === 0) {
+    wins.push({ id: 'unallocated', icon: '🎯', color: 'green', tip: fmt(remaining) + ' is unallocated — put it to work', detail: 'You have leftover budget with no savings goal set. Auto-invest or send it to an emergency fund before you spend it.', savings: 'Free money!' });
+  }
+  if (transportPct > 20) {
+    wins.push({ id: 'transport-high', icon: '🚗', color: 'red', tip: 'Transportation exceeds 20% of income', detail: 'Consider carpooling, refinancing your car loan, or shopping around for cheaper auto insurance annually.', savings: 'Review coverage' });
+  }
+  if (v('goal-debt') > 0 && v('goal-savings') === 0) {
+    wins.push({ id: 'debt-no-savings', icon: '⚠️', color: 'amber', tip: 'Build a $1,000 emergency fund first', detail: 'Paying debt is great, but without any emergency savings you risk going deeper into debt after an unexpected expense.', savings: 'Safety net first' });
+  }
+
+  return wins;
+}
+
+function renderQuickWins(wins) {
+  const container = document.getElementById('qw-container');
+  const badge = document.getElementById('qw-count');
+  const visible = wins.filter(w => !dismissedWins.has(w.id));
+
+  if (wins.length === 0) {
+    badge.style.display = 'none';
+    container.innerHTML = '<div class="qw-empty"><span>💡</span>Fill in your income and expenses above<br>to get personalized money-saving tips.</div>';
+    return;
+  }
+  if (visible.length === 0) {
+    badge.style.display = 'none';
+    container.innerHTML = '<div class="qw-empty"><span>🎉</span>You\'ve reviewed all tips!<br>Reset to see them again.</div>';
+    return;
+  }
+
+  badge.style.display = 'inline';
+  badge.textContent = visible.length + ' tip' + (visible.length !== 1 ? 's' : '');
+
+  container.innerHTML = '<div class="qw-list">' + visible.map(w => `
+    <div class="qw-item" id="qwi-${w.id}">
+      <div class="qw-icon ${w.color}">${w.icon}</div>
+      <div class="qw-body">
+        <div class="qw-tip">${w.tip}</div>
+        <div class="qw-detail">${w.detail}</div>
+      </div>
+      <div class="qw-savings${w.warn ? ' warn' : ''}">${w.savings}</div>
+      <button class="qw-done-btn" title="Mark as done" onclick="dismissWin('${w.id}')">✓</button>
+    </div>
+  `).join('') + '</div>';
+}
+
+function dismissWin(id) {
+  dismissedWins.add(id);
+  const el = document.getElementById('qwi-' + id);
+  if (el) { el.style.opacity = '0'; el.style.transform = 'translateX(10px)'; el.style.transition = 'all 0.25s'; setTimeout(() => calculate(), 260); }
+}
+
+function calculate() {
+  const income = v('income-primary') + v('income-secondary') + v('income-other');
+
+  const housing = v('housing-rent') + v('housing-utilities') + v('housing-internet');
+  const food = v('food-groceries') + v('food-dining');
+  const transport = v('trans-car') + v('trans-gas') + v('trans-insurance');
+  const family = v('family-childcare') + v('family-school') + v('family-clothing') + v('family-entertainment');
+  const savingsGoals = v('goal-savings') + v('goal-debt') + v('goal-emergency');
+
+  const totalExpenses = housing + food + transport + family + savingsGoals;
+  const remaining = income - totalExpenses;
+  const savingsRate = income > 0 ? (savingsGoals / income) * 100 : 0;
+
+  document.getElementById('total-income').textContent = fmt(income);
+  document.getElementById('val-remaining').textContent = (remaining < 0 ? '-' : '') + fmt(remaining);
+  document.getElementById('val-savings-rate').textContent = savingsRate.toFixed(1) + '%';
+  document.getElementById('val-expenses').textContent = fmt(totalExpenses);
+
+  const remCard = document.getElementById('card-remaining');
+  remCard.classList.remove('under-budget', 'over-budget');
+  if (income > 0) {
+    remCard.classList.add(remaining >= 0 ? 'under-budget' : 'over-budget');
+  }
+
+  const base = totalExpenses > 0 ? totalExpenses : 1;
+  setBar('housing', housing, base);
+  setBar('food', food, base);
+  setBar('transport', transport, base);
+  setBar('family', family, base);
+  setBar('savings', savingsGoals, base);
+
+  const wins = getQuickWins(income, housing, food, transport, family, savingsGoals, remaining);
+  renderQuickWins(wins);
+}
+
+function setBar(key, val, base) {
+  const pctVal = Math.min(100, (val / base) * 100);
+  document.getElementById('bar-' + key).style.width = pctVal + '%';
+  document.getElementById('amt-' + key).textContent = fmt(val);
+}
+
+function resetAll() {
+  document.querySelectorAll('input[type="number"]').forEach(i => i.value = '');
+  dismissedWins.clear();
+  calculate();
+}
+
+calculate();
+</script>
+</body>
+</html>
