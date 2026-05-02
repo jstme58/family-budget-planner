@@ -3,796 +3,1238 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Family Budget Planner</title>
-<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Serif+Display&display=swap" rel="stylesheet">
+<title>E Pelissier Enterprise — Digital Products</title>
+<meta name="description" content="Premium digital tools to help families take control of their finances. Beautifully designed, instantly usable.">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet">
 <style>
-  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-  :root {
-    --teal: #1D9E75;
-    --teal-light: #E1F5EE;
-    --teal-mid: #9FE1CB;
-    --teal-dark: #0F6E56;
-    --red: #E24B4A;
-    --red-light: #FCEBEB;
-    --amber: #EF9F27;
-    --amber-light: #FAEEDA;
-    --blue: #378ADD;
-    --blue-light: #E6F1FB;
-    --purple: #7F77DD;
-    --purple-light: #EEEDFE;
-    --orange: #D85A30;
-    --orange-light: #FAECE7;
-    --gray-50: #F8F9FA;
-    --gray-100: #F1F3F4;
-    --gray-200: #E8EAED;
-    --gray-400: #9AA0A6;
-    --gray-600: #5F6368;
-    --gray-800: #3C4043;
-    --gray-900: #202124;
-    --font-main: 'DM Sans', sans-serif;
-    --font-display: 'DM Serif Display', serif;
-    --shadow-sm: 0 1px 3px rgba(0,0,0,0.08), 0 1px 2px rgba(0,0,0,0.04);
-    --shadow-md: 0 4px 16px rgba(0,0,0,0.08), 0 2px 6px rgba(0,0,0,0.04);
-    --shadow-hover: 0 8px 24px rgba(0,0,0,0.10), 0 3px 8px rgba(0,0,0,0.06);
-    --radius-sm: 8px;
-    --radius-md: 12px;
-    --radius-lg: 16px;
-    --radius-xl: 24px;
-  }
+:root {
+  --navy: #1B365D;
+  --deep-navy: #0f2240;
+  --teal: #2DD4BF;
+  --dark-teal: #0B7A6E;
+  --cream: #F9F7F4;
+  --white: #FFFFFF;
+  --charcoal: #2d2d2d;
+  --mid-gray: #666666;
+  --emerald: #047857;
+  --font-display: 'Playfair Display', serif;
+  --font-body: 'DM Sans', sans-serif;
+}
 
-  body {
-    font-family: var(--font-main);
-    background: var(--gray-50);
-    color: var(--gray-900);
-    min-height: 100vh;
-    -webkit-font-smoothing: antialiased;
-  }
+html { scroll-behavior: smooth; }
 
-  /* HEADER */
-  .header {
-    background: linear-gradient(135deg, #0F6E56 0%, #1D9E75 50%, #2DC090 100%);
-    padding: 48px 24px 40px;
-    text-align: center;
-    position: relative;
-    overflow: hidden;
-  }
-  .header::before {
-    content: '';
-    position: absolute;
-    top: -60px; right: -60px;
-    width: 200px; height: 200px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.06);
-  }
-  .header::after {
-    content: '';
-    position: absolute;
-    bottom: -80px; left: -40px;
-    width: 240px; height: 240px;
-    border-radius: 50%;
-    background: rgba(255,255,255,0.04);
-  }
-  .header-icon {
-    font-size: 40px;
-    display: block;
-    margin-bottom: 12px;
-    position: relative; z-index: 1;
-  }
-  .header h1 {
-    font-family: var(--font-display);
-    font-size: 34px;
-    font-weight: 400;
-    color: #ffffff;
-    letter-spacing: -0.5px;
-    position: relative; z-index: 1;
-  }
-  .header p {
-    font-size: 15px;
-    color: rgba(255,255,255,0.80);
-    margin-top: 8px;
-    font-weight: 300;
-    position: relative; z-index: 1;
-  }
+body {
+  font-family: var(--font-body);
+  background: var(--cream);
+  color: var(--charcoal);
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
 
-  /* MAIN CONTAINER */
-  .container {
-    max-width: 780px;
-    margin: 0 auto;
-    padding: 32px 20px 60px;
-  }
+/* LANGUAGE BAR */
+.lang-bar {
+  background: var(--deep-navy);
+  padding: 10px 40px;
+  display: flex;
+  justify-content: flex-end;
+  align-items: center;
+  gap: 6px;
+}
+.lang-btn {
+  background: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  color: rgba(255,255,255,0.6);
+  font-family: var(--font-body);
+  font-size: 12px;
+  font-weight: 500;
+  padding: 4px 10px;
+  border-radius: 99px;
+  cursor: pointer;
+  transition: all 0.2s;
+  letter-spacing: 0.3px;
+}
+.lang-btn:hover, .lang-btn.active {
+  background: var(--teal);
+  border-color: var(--teal);
+  color: var(--deep-navy);
+}
 
-  /* SUMMARY DASHBOARD */
-  .summary-grid {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    gap: 14px;
-    margin-bottom: 28px;
-  }
-  .summary-card {
-    background: #fff;
-    border-radius: var(--radius-lg);
-    padding: 20px 18px;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--gray-200);
-    transition: box-shadow 0.2s, transform 0.2s;
-  }
-  .summary-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
-  .summary-card .card-icon {
-    width: 36px; height: 36px;
-    border-radius: 10px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 16px;
-    margin-bottom: 12px;
-  }
-  .summary-card .card-label {
-    font-size: 12px;
-    font-weight: 500;
-    color: var(--gray-400);
-    text-transform: uppercase;
-    letter-spacing: 0.6px;
-    margin-bottom: 6px;
-  }
-  .summary-card .card-value {
-    font-family: var(--font-display);
-    font-size: 26px;
-    font-weight: 400;
-    letter-spacing: -0.5px;
-    transition: color 0.4s;
-  }
-  .card-remaining .card-icon { background: var(--teal-light); }
-  .card-remaining .card-icon::after { content: '💵'; }
-  .card-remaining .card-value { color: var(--teal); }
-  .card-remaining.over-budget .card-value { color: var(--red); }
-  .card-savings .card-icon { background: var(--blue-light); }
-  .card-savings .card-icon::after { content: '📈'; }
-  .card-savings .card-value { color: var(--blue); }
-  .card-expenses .card-icon { background: var(--amber-light); }
-  .card-expenses .card-icon::after { content: '🧾'; }
-  .card-expenses .card-value { color: var(--amber); }
+/* NAVBAR */
+.navbar {
+  background: var(--navy);
+  padding: 18px 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: sticky;
+  top: 0;
+  z-index: 100;
+  box-shadow: 0 2px 20px rgba(0,0,0,0.3);
+}
+.logo {
+  display: flex;
+  align-items: center;
+  gap: 14px;
+  text-decoration: none;
+}
+.logo-mark {
+  width: 42px; height: 42px;
+  background: linear-gradient(135deg, var(--teal), var(--dark-teal));
+  border-radius: 10px;
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-size: 18px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: -1px;
+  flex-shrink: 0;
+}
+.logo-text {
+  display: flex;
+  flex-direction: column;
+}
+.logo-name {
+  font-family: var(--font-display);
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--white);
+  letter-spacing: 0.2px;
+  line-height: 1.2;
+}
+.logo-tagline {
+  font-size: 10px;
+  font-weight: 300;
+  color: var(--teal);
+  letter-spacing: 1px;
+  text-transform: uppercase;
+}
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 32px;
+}
+.nav-link {
+  font-size: 14px;
+  font-weight: 500;
+  color: rgba(255,255,255,0.75);
+  text-decoration: none;
+  transition: color 0.2s;
+  letter-spacing: 0.2px;
+}
+.nav-link:hover { color: var(--teal); }
+.nav-cta {
+  background: linear-gradient(135deg, var(--teal), var(--dark-teal));
+  color: var(--white) !important;
+  padding: 10px 22px;
+  border-radius: 99px;
+  font-weight: 600 !important;
+  transition: opacity 0.2s, transform 0.2s !important;
+}
+.nav-cta:hover { opacity: 0.9; transform: scale(1.03); }
 
-  /* PULSE ANIMATION */
-  @keyframes pulse-green {
-    0%, 100% { box-shadow: var(--shadow-sm); }
-    50% { box-shadow: 0 0 0 4px rgba(29,158,117,0.15), var(--shadow-sm); }
-  }
-  @keyframes pulse-red {
-    0%, 100% { box-shadow: var(--shadow-sm); }
-    50% { box-shadow: 0 0 0 4px rgba(226,75,74,0.15), var(--shadow-sm); }
-  }
-  .card-remaining.under-budget { animation: pulse-green 2.5s ease-in-out infinite; }
-  .card-remaining.over-budget { animation: pulse-red 2s ease-in-out infinite; }
+/* HERO */
+.hero {
+  background: linear-gradient(160deg, var(--deep-navy) 0%, var(--navy) 60%, #1a4a7a 100%);
+  padding: 100px 40px 90px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.hero::before {
+  content: '';
+  position: absolute;
+  top: -100px; right: -100px;
+  width: 400px; height: 400px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(45,212,191,0.12) 0%, transparent 70%);
+}
+.hero::after {
+  content: '';
+  position: absolute;
+  bottom: -120px; left: -80px;
+  width: 350px; height: 350px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(45,212,191,0.08) 0%, transparent 70%);
+}
+.hero-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+  background: rgba(45,212,191,0.12);
+  border: 1px solid rgba(45,212,191,0.3);
+  color: var(--teal);
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1.5px;
+  text-transform: uppercase;
+  padding: 7px 18px;
+  border-radius: 99px;
+  margin-bottom: 28px;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.6s ease both;
+}
+.hero h1 {
+  font-family: var(--font-display);
+  font-size: clamp(36px, 5vw, 62px);
+  font-weight: 700;
+  color: var(--white);
+  line-height: 1.15;
+  letter-spacing: -1px;
+  max-width: 700px;
+  margin: 0 auto 20px;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.6s 0.1s ease both;
+}
+.hero h1 span {
+  background: linear-gradient(135deg, var(--teal), #7fffd4);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+.hero-sub {
+  font-size: 18px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.70);
+  max-width: 520px;
+  margin: 0 auto 44px;
+  line-height: 1.7;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.6s 0.2s ease both;
+}
+.hero-actions {
+  display: flex;
+  gap: 14px;
+  justify-content: center;
+  flex-wrap: wrap;
+  position: relative; z-index: 1;
+  animation: fadeUp 0.6s 0.3s ease both;
+}
+.btn-primary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: linear-gradient(135deg, var(--teal), var(--dark-teal));
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 600;
+  padding: 15px 32px;
+  border-radius: 99px;
+  text-decoration: none;
+  transition: all 0.2s;
+  box-shadow: 0 4px 20px rgba(45,212,191,0.3);
+  border: none; cursor: pointer;
+}
+.btn-primary:hover { transform: translateY(-2px); box-shadow: 0 8px 28px rgba(45,212,191,0.4); }
+.btn-secondary {
+  display: inline-flex; align-items: center; gap: 8px;
+  background: rgba(255,255,255,0.08);
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 15px;
+  font-weight: 500;
+  padding: 15px 32px;
+  border-radius: 99px;
+  text-decoration: none;
+  border: 1px solid rgba(255,255,255,0.2);
+  transition: all 0.2s;
+  cursor: pointer;
+}
+.btn-secondary:hover { background: rgba(255,255,255,0.14); border-color: rgba(255,255,255,0.4); }
 
-  /* SPENDING BREAKDOWN */
-  .breakdown-card {
-    background: #fff;
-    border-radius: var(--radius-lg);
-    padding: 24px 24px 20px;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--gray-200);
-    margin-bottom: 28px;
-  }
-  .breakdown-title {
-    display: flex; align-items: center; gap: 10px;
-    font-size: 16px; font-weight: 600;
-    color: var(--gray-800);
-    margin-bottom: 20px;
-  }
-  .breakdown-row {
-    display: flex; align-items: center; gap: 12px;
-    margin-bottom: 12px;
-  }
-  .breakdown-label {
-    font-size: 13px;
-    color: var(--gray-600);
-    width: 110px;
-    flex-shrink: 0;
-    display: flex; align-items: center; gap: 6px;
-  }
-  .breakdown-bar-wrap {
-    flex: 1;
-    height: 8px;
-    background: var(--gray-100);
-    border-radius: 99px;
-    overflow: hidden;
-  }
-  .breakdown-bar {
-    height: 100%;
-    border-radius: 99px;
-    width: 0%;
-    transition: width 0.5s cubic-bezier(0.4,0,0.2,1);
-  }
-  .breakdown-amount {
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--gray-800);
-    width: 68px;
-    text-align: right;
-    flex-shrink: 0;
-  }
+/* STATS STRIP */
+.stats-strip {
+  background: var(--white);
+  padding: 32px 40px;
+  display: flex;
+  justify-content: center;
+  gap: 60px;
+  flex-wrap: wrap;
+  border-bottom: 1px solid rgba(0,0,0,0.06);
+}
+.stat-item { text-align: center; }
+.stat-number {
+  font-family: var(--font-display);
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--navy);
+  display: block;
+}
+.stat-label {
+  font-size: 12px;
+  font-weight: 500;
+  color: var(--mid-gray);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-top: 4px;
+}
 
-  /* SECTION CARDS */
-  .section-card {
-    background: #fff;
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--gray-200);
-    border-left-width: 4px;
-    margin-bottom: 18px;
-    transition: box-shadow 0.2s, transform 0.2s;
-  }
-  .section-card:hover { box-shadow: var(--shadow-hover); transform: translateY(-1px); }
-  .section-card.border-teal { border-left-color: var(--teal); }
-  .section-card.border-red { border-left-color: var(--red); }
-  .section-card.border-orange { border-left-color: var(--orange); }
-  .section-card.border-blue { border-left-color: var(--blue); }
-  .section-card.border-purple { border-left-color: var(--purple); }
-  .section-card.border-amber { border-left-color: var(--amber); }
+/* SECTION SHARED */
+.section { padding: 90px 40px; }
+.section-label {
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 12px;
+  display: block;
+}
+.section-title {
+  font-family: var(--font-display);
+  font-size: clamp(26px, 3vw, 40px);
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1.2;
+  letter-spacing: -0.5px;
+}
+.section-sub {
+  font-size: 16px;
+  font-weight: 300;
+  color: var(--mid-gray);
+  line-height: 1.7;
+  margin-top: 12px;
+}
+.teal-bar {
+  width: 48px; height: 3px;
+  background: linear-gradient(135deg, var(--teal), var(--dark-teal));
+  border-radius: 99px;
+  margin: 16px 0 0;
+}
 
-  .section-title {
-    font-size: 17px;
-    font-weight: 600;
-    color: var(--gray-900);
-    margin-bottom: 20px;
-    display: flex; align-items: center; gap: 10px;
-  }
+/* PRODUCTS SECTION */
+.products-section {
+  background: var(--cream);
+  padding: 90px 40px;
+}
+.products-header { text-align: center; margin-bottom: 56px; }
+.products-header .teal-bar { margin: 16px auto 0; }
+.products-grid {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: 28px;
+}
+.product-card {
+  background: var(--white);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+  border: 1px solid rgba(0,0,0,0.06);
+  transition: all 0.3s;
+  display: flex;
+  flex-direction: column;
+}
+.product-card:hover { transform: translateY(-4px); box-shadow: 0 12px 40px rgba(0,0,0,0.12); }
+.product-card.featured {
+  border: 2px solid var(--teal);
+  box-shadow: 0 4px 24px rgba(45,212,191,0.15);
+}
+.product-card-header {
+  padding: 32px 28px 24px;
+  background: linear-gradient(135deg, var(--navy), var(--deep-navy));
+  position: relative;
+  overflow: hidden;
+}
+.product-card-header::after {
+  content: '';
+  position: absolute;
+  top: -40px; right: -40px;
+  width: 120px; height: 120px;
+  border-radius: 50%;
+  background: rgba(45,212,191,0.1);
+}
+.product-badge {
+  display: inline-block;
+  background: linear-gradient(135deg, var(--teal), var(--dark-teal));
+  color: var(--white);
+  font-size: 10px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 99px;
+  margin-bottom: 16px;
+}
+.product-icon { font-size: 36px; display: block; margin-bottom: 12px; }
+.product-name {
+  font-family: var(--font-display);
+  font-size: 22px;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 8px;
+}
+.product-tagline {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.65);
+  line-height: 1.5;
+}
+.product-card-body { padding: 24px 28px; flex: 1; display: flex; flex-direction: column; }
+.product-features {
+  list-style: none;
+  margin-bottom: 24px;
+  flex: 1;
+}
+.product-features li {
+  display: flex;
+  align-items: flex-start;
+  gap: 10px;
+  font-size: 14px;
+  color: var(--charcoal);
+  padding: 7px 0;
+  border-bottom: 1px solid rgba(0,0,0,0.05);
+  line-height: 1.5;
+}
+.product-features li:last-child { border-bottom: none; }
+.feature-check {
+  width: 18px; height: 18px;
+  background: linear-gradient(135deg, var(--teal), var(--dark-teal));
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 10px;
+  color: white;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+.product-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-top: 20px;
+  border-top: 1px solid rgba(0,0,0,0.07);
+}
+.product-price {
+  display: flex;
+  flex-direction: column;
+}
+.price-amount {
+  font-family: var(--font-display);
+  font-size: 26px;
+  font-weight: 700;
+  color: var(--navy);
+  line-height: 1;
+}
+.price-note {
+  font-size: 11px;
+  color: var(--mid-gray);
+  margin-top: 3px;
+}
+.btn-buy {
+  display: inline-flex; align-items: center; gap: 6px;
+  background: linear-gradient(135deg, var(--teal), var(--dark-teal));
+  color: var(--white);
+  font-family: var(--font-body);
+  font-size: 14px;
+  font-weight: 600;
+  padding: 12px 22px;
+  border-radius: 99px;
+  text-decoration: none;
+  transition: all 0.2s;
+  border: none; cursor: pointer;
+}
+.btn-buy:hover { transform: scale(1.04); box-shadow: 0 4px 16px rgba(45,212,191,0.35); }
 
-  .field-group { margin-bottom: 16px; }
-  .field-group:last-of-type { margin-bottom: 0; }
-  .field-label {
-    display: block;
-    font-size: 13px;
-    font-weight: 500;
-    color: var(--gray-600);
-    margin-bottom: 7px;
-  }
-  .input-wrap {
-    position: relative;
-    display: flex;
-    align-items: center;
-  }
-  .input-prefix {
-    position: absolute;
-    left: 14px;
-    font-size: 15px;
-    color: var(--gray-400);
-    font-weight: 500;
-    pointer-events: none;
-    z-index: 1;
-  }
-  .input-wrap input {
-    width: 100%;
-    height: 48px;
-    padding: 0 16px 0 32px;
-    font-size: 15px;
-    font-family: var(--font-main);
-    font-weight: 400;
-    color: var(--gray-900);
-    background: var(--gray-50);
-    border: 1.5px solid var(--gray-200);
-    border-radius: var(--radius-sm);
-    outline: none;
-    transition: border-color 0.15s, background 0.15s, box-shadow 0.15s;
-    -moz-appearance: textfield;
-  }
-  .input-wrap input::-webkit-inner-spin-button,
-  .input-wrap input::-webkit-outer-spin-button { -webkit-appearance: none; }
-  .input-wrap input::placeholder { color: var(--gray-400); }
-  .input-wrap input:hover { border-color: var(--gray-400); background: #fff; }
-  .input-wrap input:focus {
-    border-color: var(--teal);
-    background: #fff;
-    box-shadow: 0 0 0 3px rgba(29,158,117,0.12);
-  }
+/* COMING SOON CARD */
+.product-card.coming-soon { opacity: 0.7; }
+.coming-soon-overlay {
+  display: inline-block;
+  background: rgba(27,54,93,0.1);
+  color: var(--navy);
+  font-size: 11px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  padding: 4px 12px;
+  border-radius: 99px;
+  margin-bottom: 16px;
+  border: 1px solid rgba(27,54,93,0.2);
+}
 
-  /* TOTAL ROW */
-  .total-row {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 18px;
-    padding-top: 16px;
-    border-top: 1px solid var(--gray-200);
-  }
-  .total-row span:first-child {
-    font-size: 14px;
-    font-weight: 600;
-    color: var(--gray-800);
-  }
-  .total-value {
-    font-family: var(--font-display);
-    font-size: 22px;
-    font-weight: 400;
-    color: var(--teal);
-    letter-spacing: -0.3px;
-  }
+/* WHY US SECTION */
+.why-section {
+  background: var(--navy);
+  padding: 90px 40px;
+}
+.why-inner {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  align-items: center;
+}
+.why-section .section-title { color: var(--white); }
+.why-section .section-label { color: var(--teal); }
+.why-section .section-sub { color: rgba(255,255,255,0.60); }
+.why-section .teal-bar { margin-top: 16px; }
+.pillars { margin-top: 40px; display: flex; flex-direction: column; gap: 20px; }
+.pillar {
+  display: flex;
+  gap: 16px;
+  align-items: flex-start;
+}
+.pillar-icon {
+  width: 44px; height: 44px;
+  background: rgba(45,212,191,0.12);
+  border: 1px solid rgba(45,212,191,0.2);
+  border-radius: 12px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 20px;
+  flex-shrink: 0;
+}
+.pillar-title {
+  font-size: 15px;
+  font-weight: 600;
+  color: var(--white);
+  margin-bottom: 4px;
+}
+.pillar-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.55);
+  line-height: 1.6;
+}
+.why-visual {
+  background: linear-gradient(160deg, rgba(45,212,191,0.08), rgba(45,212,191,0.02));
+  border: 1px solid rgba(45,212,191,0.15);
+  border-radius: 24px;
+  padding: 40px;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+}
+.mini-stat {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: rgba(255,255,255,0.04);
+  border: 1px solid rgba(255,255,255,0.07);
+  border-radius: 14px;
+  padding: 18px 20px;
+}
+.mini-stat-icon { font-size: 24px; }
+.mini-stat-label { font-size: 12px; color: rgba(255,255,255,0.5); margin-bottom: 3px; }
+.mini-stat-value { font-family: var(--font-display); font-size: 20px; color: var(--teal); font-weight: 700; }
 
-  /* RESET BUTTON */
-  .reset-wrap {
-    text-align: center;
-    margin: 32px 0 24px;
-  }
-  .reset-btn {
-    display: inline-flex;
-    align-items: center;
-    gap: 8px;
-    padding: 13px 32px;
-    font-family: var(--font-main);
-    font-size: 14px;
-    font-weight: 500;
-    color: var(--gray-600);
-    background: #fff;
-    border: 1.5px solid var(--gray-200);
-    border-radius: 99px;
-    cursor: pointer;
-    transition: all 0.2s;
-    letter-spacing: 0.1px;
-  }
-  .reset-btn:hover {
-    color: var(--red);
-    border-color: var(--red);
-    background: var(--red-light);
-    transform: scale(1.02);
-  }
-  .reset-btn:active { transform: scale(0.98); }
+/* DEMO SECTION */
+.demo-section {
+  background: var(--cream);
+  padding: 90px 40px;
+  text-align: center;
+}
+.demo-inner { max-width: 900px; margin: 0 auto; }
+.demo-inner .teal-bar { margin: 16px auto 40px; }
+.demo-frame {
+  background: var(--white);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 8px 48px rgba(0,0,0,0.12);
+  border: 1px solid rgba(0,0,0,0.08);
+}
+.demo-bar {
+  background: var(--navy);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.demo-dot { width: 12px; height: 12px; border-radius: 50%; }
+.demo-url {
+  flex: 1;
+  background: rgba(255,255,255,0.08);
+  border-radius: 6px;
+  padding: 6px 14px;
+  font-size: 12px;
+  color: rgba(255,255,255,0.6);
+  margin-left: 8px;
+  text-align: left;
+}
+.demo-embed {
+  width: 100%;
+  height: 500px;
+  border: none;
+  display: block;
+}
 
-  /* FOOTER */
-  .footer {
-    background: var(--gray-900);
-    color: rgba(255,255,255,0.65);
-    text-align: center;
-    padding: 24px;
-    font-size: 14px;
-    font-weight: 300;
-    letter-spacing: 0.2px;
-  }
+/* TESTIMONIALS */
+.testimonials-section {
+  background: var(--white);
+  padding: 90px 40px;
+}
+.testimonials-header { text-align: center; margin-bottom: 56px; }
+.testimonials-header .teal-bar { margin: 16px auto 0; }
+.testimonials-grid {
+  max-width: 1000px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 24px;
+}
+.testimonial-card {
+  background: var(--cream);
+  border-radius: 16px;
+  padding: 28px;
+  border: 1px solid rgba(0,0,0,0.06);
+  transition: all 0.2s;
+}
+.testimonial-card:hover { transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+.stars { color: var(--teal); font-size: 16px; margin-bottom: 14px; letter-spacing: 2px; }
+.testimonial-text {
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--charcoal);
+  margin-bottom: 20px;
+  font-style: italic;
+}
+.testimonial-author {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+.author-avatar {
+  width: 38px; height: 38px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--teal), var(--dark-teal));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  font-weight: 700;
+  color: white;
+  flex-shrink: 0;
+}
+.author-name { font-size: 14px; font-weight: 600; color: var(--navy); }
+.author-role { font-size: 12px; color: var(--mid-gray); }
 
-  /* QUICK WINS */
-  .quickwins-card {
-    background: #fff;
-    border-radius: var(--radius-lg);
-    padding: 24px;
-    box-shadow: var(--shadow-sm);
-    border: 1px solid var(--gray-200);
-    margin-bottom: 28px;
-    border-left: 4px solid var(--teal);
-  }
-  .quickwins-header {
-    display: flex; align-items: center; justify-content: space-between;
-    margin-bottom: 6px;
-  }
-  .quickwins-title {
-    font-size: 16px; font-weight: 600;
-    color: var(--gray-800);
-    display: flex; align-items: center; gap: 10px;
-  }
-  .quickwins-subtitle {
-    font-size: 13px;
-    color: var(--gray-400);
-    margin-bottom: 18px;
-  }
-  .qw-empty {
-    text-align: center;
-    padding: 28px 16px;
-    color: var(--gray-400);
-    font-size: 14px;
-    line-height: 1.6;
-  }
-  .qw-empty span { display: block; font-size: 28px; margin-bottom: 8px; }
-  .qw-list { display: flex; flex-direction: column; gap: 10px; }
-  .qw-item {
-    display: flex; align-items: flex-start; gap: 14px;
-    padding: 14px 16px;
-    border-radius: var(--radius-md);
-    border: 1px solid var(--gray-200);
-    background: var(--gray-50);
-    transition: all 0.2s;
-    cursor: default;
-  }
-  .qw-item:hover { background: #fff; box-shadow: var(--shadow-sm); transform: translateX(2px); }
-  .qw-item.completed {
-    opacity: 0.5;
-    text-decoration: line-through;
-    background: var(--gray-100);
-  }
-  .qw-icon {
-    width: 34px; height: 34px; border-radius: 9px;
-    display: flex; align-items: center; justify-content: center;
-    font-size: 15px; flex-shrink: 0;
-  }
-  .qw-icon.green { background: var(--teal-light); }
-  .qw-icon.amber { background: var(--amber-light); }
-  .qw-icon.blue { background: var(--blue-light); }
-  .qw-icon.red { background: var(--red-light); }
-  .qw-icon.purple { background: var(--purple-light); }
-  .qw-body { flex: 1; }
-  .qw-tip {
-    font-size: 14px; font-weight: 500;
-    color: var(--gray-900);
-    margin-bottom: 3px;
-    line-height: 1.4;
-  }
-  .qw-detail {
-    font-size: 12px;
-    color: var(--gray-600);
-    line-height: 1.5;
-  }
-  .qw-savings {
-    font-size: 12px; font-weight: 600;
-    color: var(--teal);
-    background: var(--teal-light);
-    padding: 3px 9px;
-    border-radius: 99px;
-    white-space: nowrap;
-    flex-shrink: 0;
-    align-self: center;
-  }
-  .qw-savings.warn { color: var(--red); background: var(--red-light); }
-  .qw-done-btn {
-    background: none; border: none; cursor: pointer;
-    font-size: 16px; padding: 4px; flex-shrink: 0;
-    align-self: center; opacity: 0.4;
-    transition: opacity 0.2s, transform 0.15s;
-    border-radius: 50%;
-  }
-  .qw-done-btn:hover { opacity: 1; transform: scale(1.2); }
-  .qw-count {
-    font-size: 12px; font-weight: 500;
-    color: #fff;
-    background: var(--teal);
-    padding: 2px 8px;
-    border-radius: 99px;
-  }
+/* CTA SECTION */
+.cta-section {
+  background: linear-gradient(135deg, var(--deep-navy), var(--navy));
+  padding: 90px 40px;
+  text-align: center;
+  position: relative;
+  overflow: hidden;
+}
+.cta-section::before {
+  content: '';
+  position: absolute;
+  top: 50%; left: 50%;
+  transform: translate(-50%, -50%);
+  width: 600px; height: 600px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(45,212,191,0.08) 0%, transparent 70%);
+}
+.cta-section h2 {
+  font-family: var(--font-display);
+  font-size: clamp(28px, 4vw, 46px);
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 16px;
+  position: relative; z-index: 1;
+}
+.cta-section p {
+  font-size: 16px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.65);
+  margin-bottom: 40px;
+  position: relative; z-index: 1;
+}
+.cta-section .btn-primary { position: relative; z-index: 1; font-size: 16px; padding: 18px 40px; }
 
-  @media (max-width: 600px) {
-    .summary-grid { grid-template-columns: 1fr; gap: 10px; }
-    .header h1 { font-size: 26px; }
-    .summary-card .card-value { font-size: 22px; }
-  }
+/* FOOTER */
+.footer {
+  background: var(--deep-navy);
+  padding: 56px 40px 32px;
+}
+.footer-top {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr;
+  gap: 48px;
+  padding-bottom: 40px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 32px;
+}
+.footer-brand .logo-name { font-size: 18px; margin-bottom: 6px; display: block; }
+.footer-brand .logo-tagline { font-size: 11px; margin-bottom: 16px; display: block; }
+.footer-desc {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.45);
+  line-height: 1.7;
+  max-width: 280px;
+}
+.footer-col-title {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 1px;
+  text-transform: uppercase;
+  color: var(--teal);
+  margin-bottom: 16px;
+}
+.footer-links { list-style: none; display: flex; flex-direction: column; gap: 10px; }
+.footer-links a {
+  font-size: 13px;
+  font-weight: 300;
+  color: rgba(255,255,255,0.50);
+  text-decoration: none;
+  transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--teal); }
+.footer-bottom {
+  max-width: 1100px;
+  margin: 0 auto;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+.footer-copy {
+  font-size: 12px;
+  color: rgba(255,255,255,0.30);
+}
+.social-links { display: flex; gap: 12px; }
+.social-link {
+  width: 32px; height: 32px;
+  background: rgba(255,255,255,0.07);
+  border-radius: 8px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  text-decoration: none;
+  transition: background 0.2s;
+}
+.social-link:hover { background: rgba(45,212,191,0.2); }
+
+/* ANIMATIONS */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .navbar { padding: 16px 20px; }
+  .nav-links { display: none; }
+  .hero { padding: 70px 24px 60px; }
+  .section, .products-section, .why-section, .demo-section, .testimonials-section, .cta-section { padding: 60px 24px; }
+  .why-inner { grid-template-columns: 1fr; gap: 40px; }
+  .stats-strip { gap: 32px; padding: 28px 24px; }
+  .footer-top { grid-template-columns: 1fr; gap: 32px; }
+  .footer { padding: 40px 24px 24px; }
+  .lang-bar { padding: 8px 20px; }
+}
 </style>
 </head>
 <body>
 
-<!-- HEADER -->
-<div class="header">
-  <span class="header-icon">🏠</span>
-  <h1>Family Budget Planner</h1>
-  <p>Take control of your family finances</p>
+<!-- LANGUAGE BAR -->
+<div class="lang-bar">
+  <button class="lang-btn active" onclick="setLang('en')">EN</button>
+  <button class="lang-btn" onclick="setLang('fr')">FR</button>
+  <button class="lang-btn" onclick="setLang('es')">ES</button>
+  <button class="lang-btn" onclick="setLang('pt')">PT</button>
 </div>
 
-<div class="container">
-
-  <!-- SUMMARY DASHBOARD -->
-  <div class="summary-grid">
-    <div class="summary-card card-remaining" id="card-remaining">
-      <div class="card-icon"></div>
-      <div class="card-label">Remaining Monthly</div>
-      <div class="card-value" id="val-remaining">$0.00</div>
+<!-- NAVBAR -->
+<nav class="navbar">
+  <a href="#" class="logo">
+    <div class="logo-mark">EE</div>
+    <div class="logo-text">
+      <span class="logo-name">E Pelissier Enterprise</span>
+      <span class="logo-tagline">Honoring Legacy. Empowering Dreams.</span>
     </div>
-    <div class="summary-card card-savings">
-      <div class="card-icon"></div>
-      <div class="card-label">Savings Rate</div>
-      <div class="card-value" id="val-savings-rate">0%</div>
-    </div>
-    <div class="summary-card card-expenses">
-      <div class="card-icon"></div>
-      <div class="card-label">Total Expenses</div>
-      <div class="card-value" id="val-expenses">$0.00</div>
-    </div>
+  </a>
+  <div class="nav-links">
+    <a href="#products" class="nav-link" data-i18n="nav_products">Products</a>
+    <a href="#why" class="nav-link" data-i18n="nav_why">Why Us</a>
+    <a href="#demo" class="nav-link" data-i18n="nav_demo">Live Demo</a>
+    <a href="https://epenterprisesgroup.com" class="nav-link" data-i18n="nav_main">Main Site</a>
+    <a href="#products" class="nav-link nav-cta" data-i18n="nav_cta">Get Started →</a>
   </div>
+</nav>
 
-  <!-- SPENDING BREAKDOWN -->
-  <div class="breakdown-card">
-    <div class="breakdown-title">📊 Spending Breakdown</div>
-    <div class="breakdown-row">
-      <div class="breakdown-label">🏠 Housing</div>
-      <div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-housing" style="background:var(--red)"></div></div>
-      <div class="breakdown-amount" id="amt-housing">$0.00</div>
-    </div>
-    <div class="breakdown-row">
-      <div class="breakdown-label">🍽️ Food</div>
-      <div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-food" style="background:var(--orange)"></div></div>
-      <div class="breakdown-amount" id="amt-food">$0.00</div>
-    </div>
-    <div class="breakdown-row">
-      <div class="breakdown-label">🚗 Transport</div>
-      <div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-transport" style="background:var(--blue)"></div></div>
-      <div class="breakdown-amount" id="amt-transport">$0.00</div>
-    </div>
-    <div class="breakdown-row">
-      <div class="breakdown-label">👨‍👩‍👧 Family</div>
-      <div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-family" style="background:var(--purple)"></div></div>
-      <div class="breakdown-amount" id="amt-family">$0.00</div>
-    </div>
-    <div class="breakdown-row">
-      <div class="breakdown-label">💰 Savings</div>
-      <div class="breakdown-bar-wrap"><div class="breakdown-bar" id="bar-savings" style="background:var(--teal)"></div></div>
-      <div class="breakdown-amount" id="amt-savings">$0.00</div>
-    </div>
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge">✦ <span data-i18n="hero_badge">Premium Digital Tools</span></div>
+  <h1 data-i18n="hero_h1">Take Control of Your <span>Family's Financial Future</span></h1>
+  <p class="hero-sub" data-i18n="hero_sub">Beautiful, easy-to-use financial tools designed for real families. No spreadsheets. No confusion. Just clarity.</p>
+  <div class="hero-actions">
+    <a href="#products" class="btn-primary" data-i18n="hero_cta1">Browse Tools →</a>
+    <a href="#demo" class="btn-secondary" data-i18n="hero_cta2">Try Live Demo</a>
   </div>
+</section>
 
-  <!-- HOUSEHOLD INCOME -->
-  <div class="section-card border-teal">
-    <div class="section-title">💵 Household Income</div>
-    <div class="field-group">
-      <label class="field-label">Primary Income</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="income-primary" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Secondary Income</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="income-secondary" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Other Income</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="income-other" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
-    <div class="total-row">
-      <span>Total Income</span>
-      <span class="total-value" id="total-income">$0.00</span>
-    </div>
+<!-- STATS STRIP -->
+<div class="stats-strip">
+  <div class="stat-item">
+    <span class="stat-number">6</span>
+    <span class="stat-label" data-i18n="stat1">Budget Categories</span>
   </div>
-
-  <!-- HOUSING -->
-  <div class="section-card border-red">
-    <div class="section-title">🏠 Housing</div>
-    <div class="field-group">
-      <label class="field-label">Rent / Mortgage</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="housing-rent" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Utilities</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="housing-utilities" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Internet</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="housing-internet" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
+  <div class="stat-item">
+    <span class="stat-number">8</span>
+    <span class="stat-label" data-i18n="stat2">Currencies</span>
   </div>
-
-  <!-- FOOD -->
-  <div class="section-card border-orange">
-    <div class="section-title">🍽️ Food</div>
-    <div class="field-group">
-      <label class="field-label">Groceries</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="food-groceries" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Dining Out</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="food-dining" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
+  <div class="stat-item">
+    <span class="stat-number">5</span>
+    <span class="stat-label" data-i18n="stat3">Languages</span>
   </div>
-
-  <!-- TRANSPORTATION -->
-  <div class="section-card border-blue">
-    <div class="section-title">🚗 Transportation</div>
-    <div class="field-group">
-      <label class="field-label">Car Payment</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="trans-car" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Gas</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="trans-gas" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Insurance</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="trans-insurance" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
+  <div class="stat-item">
+    <span class="stat-number">100%</span>
+    <span class="stat-label" data-i18n="stat4">Private & Secure</span>
   </div>
+</div>
 
-  <!-- FAMILY EXPENSES -->
-  <div class="section-card border-purple">
-    <div class="section-title">👨‍👩‍👧 Family Expenses</div>
-    <div class="field-group">
-      <label class="field-label">Childcare</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="family-childcare" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">School / Education</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="family-school" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Clothing</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="family-clothing" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
-    <div class="field-group">
-      <label class="field-label">Entertainment</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="family-entertainment" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
-    </div>
+<!-- PRODUCTS -->
+<section class="products-section" id="products">
+  <div class="products-header">
+    <span class="section-label" data-i18n="products_label">Our Tools</span>
+    <h2 class="section-title" data-i18n="products_title">Digital Products Built for Families</h2>
+    <p class="section-sub" data-i18n="products_sub">Everything you need to manage money with confidence — beautifully designed and instantly usable.</p>
+    <div class="teal-bar"></div>
   </div>
+  <div class="products-grid">
 
-  <!-- FINANCIAL GOALS -->
-  <div class="section-card border-teal">
-    <div class="section-title">💰 Financial Goals</div>
-    <div class="field-group">
-      <label class="field-label">Savings</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="goal-savings" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+    <!-- PRODUCT 1 — FEATURED -->
+    <div class="product-card featured">
+      <div class="product-card-header">
+        <span class="product-badge" data-i18n="badge_new">⭐ New Release</span>
+        <span class="product-icon">🏠</span>
+        <div class="product-name" data-i18n="p1_name">Family Budget Planner</div>
+        <div class="product-tagline" data-i18n="p1_tagline">Your complete monthly budget — live, visual, and stress-free.</div>
+      </div>
+      <div class="product-card-body">
+        <ul class="product-features">
+          <li><span class="feature-check">✓</span><span data-i18n="p1_f1">Live summary dashboard with instant calculations</span></li>
+          <li><span class="feature-check">✓</span><span data-i18n="p1_f2">Animated spending breakdown by category</span></li>
+          <li><span class="feature-check">✓</span><span data-i18n="p1_f3">Personalized Quick Wins money-saving tips</span></li>
+          <li><span class="feature-check">✓</span><span data-i18n="p1_f4">5 languages & 8 currencies supported</span></li>
+          <li><span class="feature-check">✓</span><span data-i18n="p1_f5">100% private — no data stored anywhere</span></li>
+          <li><span class="feature-check">✓</span><span data-i18n="p1_f6">Works on phone, tablet & desktop</span></li>
+        </ul>
+        <div class="product-footer">
+          <div class="product-price">
+            <span class="price-amount">$12</span>
+            <span class="price-note" data-i18n="price_one">one-time payment</span>
+          </div>
+          <a href="https://stan.store" class="btn-buy" data-i18n="btn_buy">Get It Now →</a>
+        </div>
+      </div>
     </div>
-    <div class="field-group">
-      <label class="field-label">Debt Payments</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="goal-debt" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+
+    <!-- PRODUCT 2 — COMING SOON -->
+    <div class="product-card coming-soon">
+      <div class="product-card-header">
+        <span class="coming-soon-overlay" data-i18n="badge_soon">🔜 Coming Soon</span>
+        <span class="product-icon">🎯</span>
+        <div class="product-name" data-i18n="p2_name">Debt Payoff Tracker</div>
+        <div class="product-tagline" data-i18n="p2_tagline">Visualize your path to being debt-free with a clear plan.</div>
+      </div>
+      <div class="product-card-body">
+        <ul class="product-features">
+          <li><span class="feature-check">✓</span><span data-i18n="p2_f1">Avalanche & snowball payoff methods</span></li>
+          <li><span class="feature-check">✓</span><span data-i18n="p2_f2">Animated progress bars per debt</span></li>
+          <li><span class="feature-check">✓</span><span data-i18n="p2_f3">Payoff date projections</span></li>
+          <li><span class="feature-check">✓</span><span data-i18n="p2_f4">Interest savings calculator</span></li>
+        </ul>
+        <div class="product-footer">
+          <div class="product-price">
+            <span class="price-amount" data-i18n="price_soon">Soon</span>
+            <span class="price-note" data-i18n="price_notify">join waitlist</span>
+          </div>
+          <a href="mailto:info@epenterprisesgroup.com" class="btn-buy" data-i18n="btn_notify">Notify Me →</a>
+        </div>
+      </div>
     </div>
-    <div class="field-group">
-      <label class="field-label">Emergency Fund</label>
-      <div class="input-wrap"><span class="input-prefix">$</span><input type="number" id="goal-emergency" placeholder="0" min="0" step="0.01" oninput="calculate()"></div>
+
+    <!-- PRODUCT 3 — COMING SOON -->
+    <div class="product-card coming-soon">
+      <div class="product-card-header">
+        <span class="coming-soon-overlay" data-i18n="badge_soon">🔜 Coming Soon</span>
+        <span class="product-icon">🥗</span>
+        <div class="product-name" data-i18n="p3_name">Family Meal Planner</div>
+        <div class="product-tagline" data-i18n="p3_tagline">Plan weekly meals and cut your grocery bill automatically.</div>
+      </div>
+      <div class="product-card-body">
+        <ul class="product-features">
+          <li><span class="feature-check">✓</span><span data-i18n="p3_f1">Weekly meal calendar</span></li>
+          <li><span class="feature-check">✓</span><span data-i18n="p3_f2">Auto-generated grocery list</span></li>
+          <li><span class="feature-check">✓</span><span data-i18n="p3_f3">Budget per meal tracker</span></li>
+          <li><span class="feature-check">✓</span><span data-i18n="p3_f4">Family portion calculator</span></li>
+        </ul>
+        <div class="product-footer">
+          <div class="product-price">
+            <span class="price-amount" data-i18n="price_soon">Soon</span>
+            <span class="price-note" data-i18n="price_notify">join waitlist</span>
+          </div>
+          <a href="mailto:info@epenterprisesgroup.com" class="btn-buy" data-i18n="btn_notify">Notify Me →</a>
+        </div>
+      </div>
     </div>
+
   </div>
+</section>
 
-  <!-- QUICK WINS -->
-  <div class="quickwins-card">
-    <div class="quickwins-header">
-      <div class="quickwins-title">⚡ Quick Wins</div>
-      <span class="qw-count" id="qw-count" style="display:none"></span>
+<!-- WHY US -->
+<section class="why-section" id="why">
+  <div class="why-inner">
+    <div>
+      <span class="section-label" data-i18n="why_label">Why E Pelissier Enterprise</span>
+      <h2 class="section-title" data-i18n="why_title">Built on Trust. Designed for Real Life.</h2>
+      <p class="section-sub" data-i18n="why_sub">We speak like a trusted friend who knows finance — no jargon, no overwhelm. Just tools that actually work for your family.</p>
+      <div class="teal-bar"></div>
+      <div class="pillars">
+        <div class="pillar">
+          <div class="pillar-icon">🔒</div>
+          <div>
+            <div class="pillar-title" data-i18n="pillar1_title">100% Private</div>
+            <div class="pillar-desc" data-i18n="pillar1_desc">Your financial data never leaves your device. No accounts, no tracking, no storage.</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">⚡</div>
+          <div>
+            <div class="pillar-title" data-i18n="pillar2_title">Instant Results</div>
+            <div class="pillar-desc" data-i18n="pillar2_desc">Everything updates as you type. No submit buttons, no loading, no waiting.</div>
+          </div>
+        </div>
+        <div class="pillar">
+          <div class="pillar-icon">🌍</div>
+          <div>
+            <div class="pillar-title" data-i18n="pillar3_title">Global by Design</div>
+            <div class="pillar-desc" data-i18n="pillar3_desc">5 languages and 8 currencies so every family can use it, anywhere in the world.</div>
+          </div>
+        </div>
+      </div>
     </div>
-    <div class="quickwins-subtitle">Personalized tips based on your numbers</div>
-    <div id="qw-container">
-      <div class="qw-empty">
-        <span>💡</span>
-        Fill in your income and expenses above<br>to get personalized money-saving tips.
+    <div class="why-visual">
+      <div class="mini-stat">
+        <div class="mini-stat-icon">💰</div>
+        <div>
+          <div class="mini-stat-label" data-i18n="mini1_label">Average monthly savings identified</div>
+          <div class="mini-stat-value">$340+</div>
+        </div>
+      </div>
+      <div class="mini-stat">
+        <div class="mini-stat-icon">⚡</div>
+        <div>
+          <div class="mini-stat-label" data-i18n="mini2_label">Setup time</div>
+          <div class="mini-stat-value" data-i18n="mini2_val">Under 5 min</div>
+        </div>
+      </div>
+      <div class="mini-stat">
+        <div class="mini-stat-icon">📱</div>
+        <div>
+          <div class="mini-stat-label" data-i18n="mini3_label">Works on any device</div>
+          <div class="mini-stat-value" data-i18n="mini3_val">Always</div>
+        </div>
+      </div>
+      <div class="mini-stat">
+        <div class="mini-stat-icon">🔄</div>
+        <div>
+          <div class="mini-stat-label" data-i18n="mini4_label">Updates & improvements</div>
+          <div class="mini-stat-value" data-i18n="mini4_val">Free forever</div>
+        </div>
       </div>
     </div>
   </div>
+</section>
 
-  <!-- RESET -->
-  <div class="reset-wrap">
-    <button class="reset-btn" onclick="resetAll()">↺ Reset All Values</button>
+<!-- LIVE DEMO -->
+<section class="demo-section" id="demo">
+  <div class="demo-inner">
+    <span class="section-label" data-i18n="demo_label">Try Before You Buy</span>
+    <h2 class="section-title" data-i18n="demo_title">See It Live — Right Here</h2>
+    <p class="section-sub" data-i18n="demo_sub">This is the actual tool. Enter your real numbers and watch it work instantly.</p>
+    <div class="teal-bar"></div>
+    <div class="demo-frame" style="margin-top:40px;">
+      <div class="demo-bar">
+        <div class="demo-dot" style="background:#ff5f57"></div>
+        <div class="demo-dot" style="background:#ffbd2e"></div>
+        <div class="demo-dot" style="background:#28c840"></div>
+        <div class="demo-url">digital.epelissierenterprise.com/budget-planner</div>
+      </div>
+      <iframe class="demo-embed" src="./budget-planner/index.html" title="Family Budget Planner Demo"></iframe>
+    </div>
   </div>
+</section>
 
-</div>
+<!-- TESTIMONIALS -->
+<section class="testimonials-section">
+  <div class="testimonials-header">
+    <span class="section-label" data-i18n="reviews_label">What Families Say</span>
+    <h2 class="section-title" data-i18n="reviews_title">Real Results for Real Families</h2>
+    <div class="teal-bar"></div>
+  </div>
+  <div class="testimonials-grid">
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text" data-i18n="t1_text">"Finally a budget tool that doesn't feel like homework. I set it up in 5 minutes and immediately saw we were overspending on dining out by $300/month!"</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">SM</div>
+        <div>
+          <div class="author-name">Sarah M.</div>
+          <div class="author-role" data-i18n="t1_role">Mom of 3, Florida</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text" data-i18n="t2_text">"The Quick Wins section alone saved us over $200 a month. It spotted things we never would have noticed on our own. Worth every penny."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">JR</div>
+        <div>
+          <div class="author-name">James R.</div>
+          <div class="author-role" data-i18n="t2_role">Father of 2, Texas</div>
+        </div>
+      </div>
+    </div>
+    <div class="testimonial-card">
+      <div class="stars">★★★★★</div>
+      <p class="testimonial-text" data-i18n="t3_text">"My husband and I use this every month together now. It's made money conversations so much easier. No more arguments — just clarity."</p>
+      <div class="testimonial-author">
+        <div class="author-avatar">AL</div>
+        <div>
+          <div class="author-name">Amara L.</div>
+          <div class="author-role" data-i18n="t3_role">Couple, Georgia</div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA -->
+<section class="cta-section">
+  <h2 data-i18n="cta_title">Ready to Take Control?</h2>
+  <p data-i18n="cta_sub">Start fresh this month. Your family's financial future starts today.</p>
+  <a href="#products" class="btn-primary" data-i18n="cta_btn">Get the Budget Planner →</a>
+</section>
 
 <!-- FOOTER -->
-<div class="footer">Start fresh each month and take control of your family's financial future 💪</div>
+<footer class="footer">
+  <div class="footer-top">
+    <div class="footer-brand">
+      <span class="logo-name" style="font-family:var(--font-display);color:white;">E Pelissier Enterprise</span>
+      <span class="logo-tagline">Honoring Legacy. Empowering Dreams.</span>
+      <p class="footer-desc" data-i18n="footer_desc">Premium digital tools to help families take control of their finances — beautifully designed, instantly usable.</p>
+    </div>
+    <div>
+      <div class="footer-col-title" data-i18n="footer_products">Products</div>
+      <ul class="footer-links">
+        <li><a href="#products" data-i18n="fp1">Family Budget Planner</a></li>
+        <li><a href="#products" data-i18n="fp2">Debt Payoff Tracker</a></li>
+        <li><a href="#products" data-i18n="fp3">Meal Planner</a></li>
+      </ul>
+    </div>
+    <div>
+      <div class="footer-col-title" data-i18n="footer_connect">Connect</div>
+      <ul class="footer-links">
+        <li><a href="https://epenterprisesgroup.com">epenterprisesgroup.com</a></li>
+        <li><a href="mailto:info@epenterprisesgroup.com">info@epenterprisesgroup.com</a></li>
+        <li><a href="https://instagram.com/epelissierenterprise">Instagram</a></li>
+        <li><a href="https://facebook.com/EpelissierEnterprise">Facebook</a></li>
+      </ul>
+    </div>
+  </div>
+  <div class="footer-bottom">
+    <span class="footer-copy">© 2025 E Pelissier Enterprise. All rights reserved.</span>
+    <div class="social-links">
+      <a href="https://instagram.com/epelissierenterprise" class="social-link">📸</a>
+      <a href="https://facebook.com/EpelissierEnterprise" class="social-link">📘</a>
+      <a href="https://linkedin.com/company/epelissierenterprise" class="social-link">💼</a>
+      <a href="https://tiktok.com/@epelissierenterprise" class="social-link">🎵</a>
+    </div>
+  </div>
+</footer>
 
 <script>
-function v(id) {
-  return parseFloat(document.getElementById(id).value) || 0;
+const translations = {
+  en: {
+    nav_products: "Products", nav_why: "Why Us", nav_demo: "Live Demo", nav_main: "Main Site", nav_cta: "Get Started →",
+    hero_badge: "Premium Digital Tools", hero_h1: "Take Control of Your Family's Financial Future",
+    hero_sub: "Beautiful, easy-to-use financial tools designed for real families. No spreadsheets. No confusion. Just clarity.",
+    hero_cta1: "Browse Tools →", hero_cta2: "Try Live Demo",
+    stat1: "Budget Categories", stat2: "Currencies", stat3: "Languages", stat4: "Private & Secure",
+    products_label: "Our Tools", products_title: "Digital Products Built for Families",
+    products_sub: "Everything you need to manage money with confidence — beautifully designed and instantly usable.",
+    badge_new: "⭐ New Release", badge_soon: "🔜 Coming Soon",
+    p1_name: "Family Budget Planner", p1_tagline: "Your complete monthly budget — live, visual, and stress-free.",
+    p1_f1: "Live summary dashboard with instant calculations", p1_f2: "Animated spending breakdown by category",
+    p1_f3: "Personalized Quick Wins money-saving tips", p1_f4: "5 languages & 8 currencies supported",
+    p1_f5: "100% private — no data stored anywhere", p1_f6: "Works on phone, tablet & desktop",
+    p2_name: "Debt Payoff Tracker", p2_tagline: "Visualize your path to being debt-free with a clear plan.",
+    p2_f1: "Avalanche & snowball payoff methods", p2_f2: "Animated progress bars per debt",
+    p2_f3: "Payoff date projections", p2_f4: "Interest savings calculator",
+    p3_name: "Family Meal Planner", p3_tagline: "Plan weekly meals and cut your grocery bill automatically.",
+    p3_f1: "Weekly meal calendar", p3_f2: "Auto-generated grocery list",
+    p3_f3: "Budget per meal tracker", p3_f4: "Family portion calculator",
+    price_one: "one-time payment", price_soon: "Soon", price_notify: "join waitlist",
+    btn_buy: "Get It Now →", btn_notify: "Notify Me →",
+    why_label: "Why E Pelissier Enterprise", why_title: "Built on Trust. Designed for Real Life.",
+    why_sub: "We speak like a trusted friend who knows finance — no jargon, no overwhelm. Just tools that actually work for your family.",
+    pillar1_title: "100% Private", pillar1_desc: "Your financial data never leaves your device. No accounts, no tracking, no storage.",
+    pillar2_title: "Instant Results", pillar2_desc: "Everything updates as you type. No submit buttons, no loading, no waiting.",
+    pillar3_title: "Global by Design", pillar3_desc: "5 languages and 8 currencies so every family can use it, anywhere in the world.",
+    mini1_label: "Average monthly savings identified", mini2_label: "Setup time", mini2_val: "Under 5 min",
+    mini3_label: "Works on any device", mini3_val: "Always", mini4_label: "Updates & improvements", mini4_val: "Free forever",
+    demo_label: "Try Before You Buy", demo_title: "See It Live — Right Here",
+    demo_sub: "This is the actual tool. Enter your real numbers and watch it work instantly.",
+    reviews_label: "What Families Say", reviews_title: "Real Results for Real Families",
+    t1_text: '"Finally a budget tool that doesn\'t feel like homework. I set it up in 5 minutes and immediately saw we were overspending on dining out by $300/month!"',
+    t1_role: "Mom of 3, Florida",
+    t2_text: '"The Quick Wins section alone saved us over $200 a month. It spotted things we never would have noticed on our own. Worth every penny."',
+    t2_role: "Father of 2, Texas",
+    t3_text: '"My husband and I use this every month together now. It\'s made money conversations so much easier. No more arguments — just clarity."',
+    t3_role: "Couple, Georgia",
+    cta_title: "Ready to Take Control?", cta_sub: "Start fresh this month. Your family's financial future starts today.",
+    cta_btn: "Get the Budget Planner →",
+    footer_desc: "Premium digital tools to help families take control of their finances — beautifully designed, instantly usable.",
+    footer_products: "Products", fp1: "Family Budget Planner", fp2: "Debt Payoff Tracker", fp3: "Meal Planner",
+    footer_connect: "Connect"
+  },
+  fr: {
+    nav_products: "Produits", nav_why: "Pourquoi Nous", nav_demo: "Démo Live", nav_main: "Site Principal", nav_cta: "Commencer →",
+    hero_badge: "Outils Numériques Premium", hero_h1: "Prenez le Contrôle de l'Avenir Financier de Votre Famille",
+    hero_sub: "Des outils financiers beaux et faciles à utiliser, conçus pour les vraies familles. Sans tableaux compliqués. Sans confusion.",
+    hero_cta1: "Voir les Outils →", hero_cta2: "Essayer la Démo",
+    stat1: "Catégories de Budget", stat2: "Devises", stat3: "Langues", stat4: "Privé et Sécurisé",
+    products_label: "Nos Outils", products_title: "Produits Numériques pour les Familles",
+    products_sub: "Tout ce dont vous avez besoin pour gérer votre argent avec confiance.",
+    badge_new: "⭐ Nouveau", badge_soon: "🔜 Bientôt",
+    p1_name: "Planificateur Budgétaire Familial", p1_tagline: "Votre budget mensuel complet — en direct, visuel et sans stress.",
+    p1_f1: "Tableau de bord en direct avec calculs instantanés", p1_f2: "Répartition animée des dépenses par catégorie",
+    p1_f3: "Conseils personnalisés Quick Wins", p1_f4: "5 langues et 8 devises supportées",
+    p1_f5: "100% privé — aucune donnée stockée", p1_f6: "Fonctionne sur téléphone, tablette et ordinateur",
+    p2_name: "Suivi du Remboursement des Dettes", p2_tagline: "Visualisez votre chemin vers la liberté financière.",
+    p2_f1: "Méthodes avalanche et boule de neige", p2_f2: "Barres de progression animées",
+    p2_f3: "Projections de date de remboursement", p2_f4: "Calculateur d'économies d'intérêts",
+    p3_name: "Planificateur de Repas Familial", p3_tagline: "Planifiez vos repas et réduisez votre facture d'épicerie.",
+    p3_f1: "Calendrier de repas hebdomadaire", p3_f2: "Liste de courses automatique",
+    p3_f3: "Suivi du budget par repas", p3_f4: "Calculateur de portions familiales",
+    price_one: "paiement unique", price_soon: "Bientôt", price_notify: "rejoindre la liste",
+    btn_buy: "Obtenir Maintenant →", btn_notify: "Me Notifier →",
+    why_label: "Pourquoi E Pelissier Enterprise", why_title: "Fondé sur la Confiance. Conçu pour la Vie Réelle.",
+    why_sub: "Nous parlons comme un ami de confiance qui connaît la finance — sans jargon, sans stress.",
+    pillar1_title: "100% Privé", pillar1_desc: "Vos données financières ne quittent jamais votre appareil.",
+    pillar2_title: "Résultats Instantanés", pillar2_desc: "Tout se met à jour au fur et à mesure que vous tapez.",
+    pillar3_title: "Mondial par Conception", pillar3_desc: "5 langues et 8 devises pour toutes les familles du monde.",
+    mini1_label: "Économies mensuelles identifiées en moyenne", mini2_label: "Temps de configuration", mini2_val: "Moins de 5 min",
+    mini3_label: "Fonctionne sur tout appareil", mini3_val: "Toujours", mini4_label: "Mises à jour", mini4_val: "Gratuites à vie",
+    demo_label: "Essayez Avant d'Acheter", demo_title: "Voyez-le en Direct — Ici Même",
+    demo_sub: "C'est l'outil réel. Entrez vos vrais chiffres et regardez-le fonctionner instantanément.",
+    reviews_label: "Ce que Disent les Familles", reviews_title: "Résultats Réels pour Vraies Familles",
+    t1_text: '"Enfin un outil budgétaire qui ne ressemble pas à des devoirs. Je l\'ai configuré en 5 minutes!"',
+    t1_role: "Maman de 3, Floride",
+    t2_text: '"La section Quick Wins seule nous a économisé plus de 200$/mois. Ça vaut chaque centime."',
+    t2_role: "Papa de 2, Texas",
+    t3_text: '"Mon mari et moi l\'utilisons ensemble chaque mois. Ça a rendu les conversations sur l\'argent tellement plus faciles."',
+    t3_role: "Couple, Géorgie",
+    cta_title: "Prêt à Prendre le Contrôle?", cta_sub: "Commencez frais ce mois-ci. L'avenir financier de votre famille commence aujourd'hui.",
+    cta_btn: "Obtenir le Planificateur →",
+    footer_desc: "Outils numériques premium pour aider les familles à contrôler leurs finances.",
+    footer_products: "Produits", fp1: "Planificateur Budgétaire", fp2: "Suivi des Dettes", fp3: "Planificateur de Repas",
+    footer_connect: "Contact"
+  },
+  es: {
+    nav_products: "Productos", nav_why: "Por Qué Nosotros", nav_demo: "Demo en Vivo", nav_main: "Sitio Principal", nav_cta: "Empezar →",
+    hero_badge: "Herramientas Digitales Premium", hero_h1: "Toma el Control del Futuro Financiero de Tu Familia",
+    hero_sub: "Herramientas financieras hermosas y fáciles de usar, diseñadas para familias reales. Sin hojas de cálculo. Sin confusión.",
+    hero_cta1: "Ver Herramientas →", hero_cta2: "Probar Demo",
+    stat1: "Categorías de Presupuesto", stat2: "Monedas", stat3: "Idiomas", stat4: "Privado y Seguro",
+    products_label: "Nuestras Herramientas", products_title: "Productos Digitales para Familias",
+    products_sub: "Todo lo que necesitas para manejar el dinero con confianza.",
+    badge_new: "⭐ Nuevo", badge_soon: "🔜 Próximamente",
+    p1_name: "Planificador de Presupuesto Familiar", p1_tagline: "Tu presupuesto mensual completo — en vivo, visual y sin estrés.",
+    p1_f1: "Panel de resumen en vivo con cálculos instantáneos", p1_f2: "Desglose animado de gastos por categoría",
+    p1_f3: "Consejos personalizados Quick Wins", p1_f4: "5 idiomas y 8 monedas soportadas",
+    p1_f5: "100% privado — sin datos almacenados", p1_f6: "Funciona en teléfono, tableta y computadora",
+    p2_name: "Rastreador de Pago de Deudas", p2_tagline: "Visualiza tu camino hacia la libertad financiera.",
+    p2_f1: "Métodos avalancha y bola de nieve", p2_f2: "Barras de progreso animadas",
+    p2_f3: "Proyecciones de fecha de pago", p2_f4: "Calculadora de ahorro de intereses",
+    p3_name: "Planificador de Comidas Familiar", p3_tagline: "Planifica comidas semanales y reduce tu factura de supermercado.",
+    p3_f1: "Calendario semanal de comidas", p3_f2: "Lista de compras automática",
+    p3_f3: "Rastreador de presupuesto por comida", p3_f4: "Calculadora de porciones familiares",
+    price_one: "pago único", price_soon: "Pronto", price_notify: "unirse a la lista",
+    btn_buy: "Obtenerlo Ahora →", btn_notify: "Notificarme →",
+    why_label: "Por Qué E Pelissier Enterprise", why_title: "Construido en Confianza. Diseñado para la Vida Real.",
+    why_sub: "Hablamos como un amigo de confianza que conoce las finanzas — sin jerga, sin agobio.",
+    pillar1_title: "100% Privado", pillar1_desc: "Tus datos financieros nunca salen de tu dispositivo.",
+    pillar2_title: "Resultados Instantáneos", pillar2_desc: "Todo se actualiza mientras escribes.",
+    pillar3_title: "Global por Diseño", pillar3_desc: "5 idiomas y 8 monedas para familias de todo el mundo.",
+    mini1_label: "Ahorros mensuales identificados en promedio", mini2_label: "Tiempo de configuración", mini2_val: "Menos de 5 min",
+    mini3_label: "Funciona en cualquier dispositivo", mini3_val: "Siempre", mini4_label: "Actualizaciones", mini4_val: "Gratis para siempre",
+    demo_label: "Prueba Antes de Comprar", demo_title: "Véalo en Vivo — Aquí Mismo",
+    demo_sub: "Esta es la herramienta real. Ingresa tus números reales y mírala funcionar al instante.",
+    reviews_label: "Lo que Dicen las Familias", reviews_title: "Resultados Reales para Familias Reales",
+    t1_text: '"¡Por fin una herramienta de presupuesto que no parece tarea! La configuré en 5 minutos."',
+    t1_role: "Mamá de 3, Florida",
+    t2_text: '"La sección Quick Wins sola nos ahorró más de $200 al mes. Vale cada centavo."',
+    t2_role: "Padre de 2, Texas",
+    t3_text: '"Mi esposo y yo la usamos juntos cada mes. Ha hecho las conversaciones sobre dinero mucho más fáciles."',
+    t3_role: "Pareja, Georgia",
+    cta_title: "¿Listo para Tomar el Control?", cta_sub: "Empieza de nuevo este mes. El futuro financiero de tu familia empieza hoy.",
+    cta_btn: "Obtener el Planificador →",
+    footer_desc: "Herramientas digitales premium para ayudar a las familias a controlar sus finanzas.",
+    footer_products: "Productos", fp1: "Planificador de Presupuesto", fp2: "Rastreador de Deudas", fp3: "Planificador de Comidas",
+    footer_connect: "Contacto"
+  },
+  pt: {
+    nav_products: "Produtos", nav_why: "Por Que Nós", nav_demo: "Demo ao Vivo", nav_main: "Site Principal", nav_cta: "Começar →",
+    hero_badge: "Ferramentas Digitais Premium", hero_h1: "Assuma o Controle do Futuro Financeiro da Sua Família",
+    hero_sub: "Ferramentas financeiras bonitas e fáceis de usar, projetadas para famílias reais. Sem planilhas. Sem confusão.",
+    hero_cta1: "Ver Ferramentas →", hero_cta2: "Experimentar Demo",
+    stat1: "Categorias de Orçamento", stat2: "Moedas", stat3: "Idiomas", stat4: "Privado e Seguro",
+    products_label: "Nossas Ferramentas", products_title: "Produtos Digitais para Famílias",
+    products_sub: "Tudo que você precisa para gerenciar dinheiro com confiança.",
+    badge_new: "⭐ Novo", badge_soon: "🔜 Em Breve",
+    p1_name: "Planejador de Orçamento Familiar", p1_tagline: "Seu orçamento mensal completo — ao vivo, visual e sem estresse.",
+    p1_f1: "Painel resumo ao vivo com cálculos instantâneos", p1_f2: "Gráfico animado de gastos por categoria",
+    p1_f3: "Dicas personalizadas Quick Wins", p1_f4: "5 idiomas e 8 moedas suportadas",
+    p1_f5: "100% privado — nenhum dado armazenado", p1_f6: "Funciona em telefone, tablet e desktop",
+    p2_name: "Rastreador de Pagamento de Dívidas", p2_tagline: "Visualize seu caminho para a liberdade financeira.",
+    p2_f1: "Métodos avalanche e bola de neve", p2_f2: "Barras de progresso animadas",
+    p2_f3: "Projeções de data de pagamento", p2_f4: "Calculadora de economia de juros",
+    p3_name: "Planejador de Refeições Familiar", p3_tagline: "Planeje refeições semanais e reduza sua conta de supermercado.",
+    p3_f1: "Calendário semanal de refeições", p3_f2: "Lista de compras automática",
+    p3_f3: "Rastreador de orçamento por refeição", p3_f4: "Calculadora de porções familiares",
+    price_one: "pagamento único", price_soon: "Em Breve", price_notify: "entrar na lista",
+    btn_buy: "Obter Agora →", btn_notify: "Me Notificar →",
+    why_label: "Por Que E Pelissier Enterprise", why_title: "Construído na Confiança. Projetado para a Vida Real.",
+    why_sub: "Falamos como um amigo de confiança que conhece finanças — sem jargão, sem pressão.",
+    pillar1_title: "100% Privado", pillar1_desc: "Seus dados financeiros nunca saem do seu dispositivo.",
+    pillar2_title: "Resultados Instantâneos", pillar2_desc: "Tudo atualiza enquanto você digita.",
+    pillar3_title: "Global por Design", pillar3_desc: "5 idiomas e 8 moedas para famílias do mundo todo.",
+    mini1_label: "Economia mensal média identificada", mini2_label: "Tempo de configuração", mini2_val: "Menos de 5 min",
+    mini3_label: "Funciona em qualquer dispositivo", mini3_val: "Sempre", mini4_label: "Atualizações", mini4_val: "Gratuitas para sempre",
+    demo_label: "Experimente Antes de Comprar", demo_title: "Veja ao Vivo — Aqui Mesmo",
+    demo_sub: "Esta é a ferramenta real. Insira seus números reais e veja funcionar instantaneamente.",
+    reviews_label: "O que as Famílias Dizem", reviews_title: "Resultados Reais para Famílias Reais",
+    t1_text: '"Finalmente uma ferramenta de orçamento que não parece dever de casa. Configurei em 5 minutos!"',
+    t1_role: "Mãe de 3, Flórida",
+    t2_text: '"A seção Quick Wins sozinha nos economizou mais de R$200 por mês. Vale cada centavo."',
+    t2_role: "Pai de 2, Texas",
+    t3_text: '"Meu marido e eu usamos juntos todo mês. Tornou as conversas sobre dinheiro muito mais fáceis."',
+    t3_role: "Casal, Geórgia",
+    cta_title: "Pronto para Assumir o Controle?", cta_sub: "Comece de novo este mês. O futuro financeiro da sua família começa hoje.",
+    cta_btn: "Obter o Planejador →",
+    footer_desc: "Ferramentas digitais premium para ajudar famílias a controlar suas finanças.",
+    footer_products: "Produtos", fp1: "Planejador de Orçamento", fp2: "Rastreador de Dívidas", fp3: "Planejador de Refeições",
+    footer_connect: "Contato"
+  }
+};
+
+let currentLang = 'en';
+
+function setLang(lang) {
+  currentLang = lang;
+  const t = translations[lang];
+  document.querySelectorAll('[data-i18n]').forEach(el => {
+    const key = el.getAttribute('data-i18n');
+    if (t[key]) el.textContent = t[key];
+  });
+  document.querySelectorAll('.lang-btn').forEach(btn => btn.classList.remove('active'));
+  document.querySelector(`.lang-btn[onclick="setLang('${lang}')"]`).classList.add('active');
 }
-function fmt(n) {
-  return '$' + Math.abs(n).toLocaleString('en-US', { minimumFractionDigits: 2, maximumFractionDigits: 2 });
-}
-function pct(n) {
-  return Math.round(Math.max(0, Math.min(100, n))) + '%';
-}
-
-let dismissedWins = new Set();
-
-function getQuickWins(income, housing, food, transport, family, savingsGoals, remaining) {
-  const wins = [];
-  if (income === 0) return wins;
-
-  const housingPct = (housing / income) * 100;
-  const foodPct = (food / income) * 100;
-  const transportPct = (transport / income) * 100;
-  const diningOut = v('food-dining');
-  const entertainment = v('family-entertainment');
-  const savingsRate = (savingsGoals / income) * 100;
-  const gas = v('trans-gas');
-  const utilities = v('housing-utilities');
-  const clothing = v('family-clothing');
-
-  if (housingPct > 35) {
-    const excess = housing - (income * 0.30);
-    wins.push({ id: 'housing-high', icon: '🏠', color: 'red', tip: 'Housing exceeds 35% of income', detail: 'Financial experts recommend keeping housing under 30%. Consider refinancing, a roommate, or negotiating rent.', savings: fmt(excess) + '/mo to reclaim', warn: true });
-  }
-  if (diningOut > 0 && (diningOut / income) * 100 > 8) {
-    const target = income * 0.05;
-    wins.push({ id: 'dining-high', icon: '🍽️', color: 'amber', tip: 'Cut dining out by cooking 2 more meals/week', detail: 'Dining out accounts for over 8% of your income. Meal prepping on Sundays can save hundreds monthly.', savings: fmt(diningOut - target) + '/mo potential' });
-  }
-  if (savingsRate < 10 && income > 0) {
-    const target = income * 0.10;
-    wins.push({ id: 'savings-low', icon: '💰', color: 'green', tip: 'Boost savings to the 10% benchmark', detail: 'You\'re saving less than 10% of income. Even a small auto-transfer each payday adds up fast.', savings: fmt(target - savingsGoals) + '/mo to goal' });
-  }
-  if (entertainment > 0 && entertainment > income * 0.05) {
-    wins.push({ id: 'entertainment', icon: '🎮', color: 'purple', tip: 'Audit streaming & subscription services', detail: 'Entertainment is above 5% of income. Cancel 1–2 unused subscriptions — the average family wastes $50+/mo.', savings: '~$50+/mo' });
-  }
-  if (utilities > 0 && utilities > 300) {
-    wins.push({ id: 'utilities', icon: '💡', color: 'amber', tip: 'Lower utility bills with simple swaps', detail: 'LED bulbs, a smart thermostat, and unplugging idle devices can reduce utility bills by 15–20%.', savings: fmt(utilities * 0.17) + '/mo avg' });
-  }
-  if (gas > 0 && gas > 200) {
-    wins.push({ id: 'gas', icon: '⛽', color: 'blue', tip: 'Use GasBuddy or pay with cashback cards', detail: 'Apps like GasBuddy find the cheapest nearby stations. A cashback card on gas adds 3–5% back automatically.', savings: fmt(gas * 0.04) + '/mo back' });
-  }
-  if (clothing > 0 && clothing > income * 0.04) {
-    wins.push({ id: 'clothing', icon: '👕', color: 'blue', tip: 'Shop end-of-season sales & secondhand', detail: 'Clothing is above 4% of income. Thrift stores and seasonal clearance can cut clothing costs by 50–70%.', savings: fmt(clothing * 0.50) + '/mo avg' });
-  }
-  if (remaining > 200 && savingsGoals === 0) {
-    wins.push({ id: 'unallocated', icon: '🎯', color: 'green', tip: fmt(remaining) + ' is unallocated — put it to work', detail: 'You have leftover budget with no savings goal set. Auto-invest or send it to an emergency fund before you spend it.', savings: 'Free money!' });
-  }
-  if (transportPct > 20) {
-    wins.push({ id: 'transport-high', icon: '🚗', color: 'red', tip: 'Transportation exceeds 20% of income', detail: 'Consider carpooling, refinancing your car loan, or shopping around for cheaper auto insurance annually.', savings: 'Review coverage' });
-  }
-  if (v('goal-debt') > 0 && v('goal-savings') === 0) {
-    wins.push({ id: 'debt-no-savings', icon: '⚠️', color: 'amber', tip: 'Build a $1,000 emergency fund first', detail: 'Paying debt is great, but without any emergency savings you risk going deeper into debt after an unexpected expense.', savings: 'Safety net first' });
-  }
-
-  return wins;
-}
-
-function renderQuickWins(wins) {
-  const container = document.getElementById('qw-container');
-  const badge = document.getElementById('qw-count');
-  const visible = wins.filter(w => !dismissedWins.has(w.id));
-
-  if (wins.length === 0) {
-    badge.style.display = 'none';
-    container.innerHTML = '<div class="qw-empty"><span>💡</span>Fill in your income and expenses above<br>to get personalized money-saving tips.</div>';
-    return;
-  }
-  if (visible.length === 0) {
-    badge.style.display = 'none';
-    container.innerHTML = '<div class="qw-empty"><span>🎉</span>You\'ve reviewed all tips!<br>Reset to see them again.</div>';
-    return;
-  }
-
-  badge.style.display = 'inline';
-  badge.textContent = visible.length + ' tip' + (visible.length !== 1 ? 's' : '');
-
-  container.innerHTML = '<div class="qw-list">' + visible.map(w => `
-    <div class="qw-item" id="qwi-${w.id}">
-      <div class="qw-icon ${w.color}">${w.icon}</div>
-      <div class="qw-body">
-        <div class="qw-tip">${w.tip}</div>
-        <div class="qw-detail">${w.detail}</div>
-      </div>
-      <div class="qw-savings${w.warn ? ' warn' : ''}">${w.savings}</div>
-      <button class="qw-done-btn" title="Mark as done" onclick="dismissWin('${w.id}')">✓</button>
-    </div>
-  `).join('') + '</div>';
-}
-
-function dismissWin(id) {
-  dismissedWins.add(id);
-  const el = document.getElementById('qwi-' + id);
-  if (el) { el.style.opacity = '0'; el.style.transform = 'translateX(10px)'; el.style.transition = 'all 0.25s'; setTimeout(() => calculate(), 260); }
-}
-
-function calculate() {
-  const income = v('income-primary') + v('income-secondary') + v('income-other');
-
-  const housing = v('housing-rent') + v('housing-utilities') + v('housing-internet');
-  const food = v('food-groceries') + v('food-dining');
-  const transport = v('trans-car') + v('trans-gas') + v('trans-insurance');
-  const family = v('family-childcare') + v('family-school') + v('family-clothing') + v('family-entertainment');
-  const savingsGoals = v('goal-savings') + v('goal-debt') + v('goal-emergency');
-
-  const totalExpenses = housing + food + transport + family + savingsGoals;
-  const remaining = income - totalExpenses;
-  const savingsRate = income > 0 ? (savingsGoals / income) * 100 : 0;
-
-  document.getElementById('total-income').textContent = fmt(income);
-  document.getElementById('val-remaining').textContent = (remaining < 0 ? '-' : '') + fmt(remaining);
-  document.getElementById('val-savings-rate').textContent = savingsRate.toFixed(1) + '%';
-  document.getElementById('val-expenses').textContent = fmt(totalExpenses);
-
-  const remCard = document.getElementById('card-remaining');
-  remCard.classList.remove('under-budget', 'over-budget');
-  if (income > 0) {
-    remCard.classList.add(remaining >= 0 ? 'under-budget' : 'over-budget');
-  }
-
-  const base = totalExpenses > 0 ? totalExpenses : 1;
-  setBar('housing', housing, base);
-  setBar('food', food, base);
-  setBar('transport', transport, base);
-  setBar('family', family, base);
-  setBar('savings', savingsGoals, base);
-
-  const wins = getQuickWins(income, housing, food, transport, family, savingsGoals, remaining);
-  renderQuickWins(wins);
-}
-
-function setBar(key, val, base) {
-  const pctVal = Math.min(100, (val / base) * 100);
-  document.getElementById('bar-' + key).style.width = pctVal + '%';
-  document.getElementById('amt-' + key).textContent = fmt(val);
-}
-
-function resetAll() {
-  document.querySelectorAll('input[type="number"]').forEach(i => i.value = '');
-  dismissedWins.clear();
-  calculate();
-}
-
-calculate();
 </script>
 </body>
 </html>
