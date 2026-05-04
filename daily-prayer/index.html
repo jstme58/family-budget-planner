@@ -1,1 +1,422 @@
 
+<!doctype html>
+<html lang="en" class="h-full">
+ <head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Daily Prayer &amp; Reflection Companion</title>
+  <script src="https://cdn.tailwindcss.com/3.4.17"></script>
+  <script src="https://cdn.jsdelivr.net/npm/lucide@0.263.0/dist/umd/lucide.min.js"></script>
+  <script src="/_sdk/element_sdk.js"></script>
+  <script src="/_sdk/data_sdk.js"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,600;0,700;1,400&amp;family=Nunito:wght@400;500;600&amp;display=swap" rel="stylesheet">
+  <style>
+  html, body { height: 100%; margin: 0; }
+  .font-heading { font-family: 'Cormorant Garamond', Georgia, serif; }
+  .font-body { font-family: 'Nunito', sans-serif; }
+  @keyframes fadeUp { from { opacity: 0; transform: translateY(16px); } to { opacity: 1; transform: translateY(0); } }
+  .anim-in { animation: fadeUp 0.6s ease both; }
+  .anim-d1 { animation-delay: 0.1s; }
+  .anim-d2 { animation-delay: 0.2s; }
+  .anim-d3 { animation-delay: 0.3s; }
+  .anim-d4 { animation-delay: 0.4s; }
+  .anim-d5 { animation-delay: 0.5s; }
+  .anim-d6 { animation-delay: 0.6s; }
+  .step-dot { transition: all 0.3s ease; }
+  .step-dot.active { transform: scale(1.3); }
+  textarea:focus, input:focus { outline: none; box-shadow: 0 0 0 2px rgba(180,155,120,0.3); }
+  .toast-msg { animation: fadeUp 0.4s ease both; }
+</style>
+  <style>body { box-sizing: border-box; }</style>
+ </head>
+ <body class="h-full font-body" style="background-color: #FDF9F4;">
+  <div id="app" class="h-full w-full overflow-auto" style="background-color: #FDF9F4;">
+   <!-- Progress dots -->
+   <div class="sticky top-0 z-10 flex justify-center gap-2 py-3" style="background: linear-gradient(to bottom, #FDF9F4 70%, transparent);">
+    <span class="step-dot w-2.5 h-2.5 rounded-full active" style="background-color: #C9A974;" data-step="0"></span> <span class="step-dot w-2.5 h-2.5 rounded-full" style="background-color: #E8DCD1;" data-step="1"></span> <span class="step-dot w-2.5 h-2.5 rounded-full" style="background-color: #E8DCD1;" data-step="2"></span> <span class="step-dot w-2.5 h-2.5 rounded-full" style="background-color: #E8DCD1;" data-step="3"></span> <span class="step-dot w-2.5 h-2.5 rounded-full" style="background-color: #E8DCD1;" data-step="4"></span> <span class="step-dot w-2.5 h-2.5 rounded-full" style="background-color: #E8DCD1;" data-step="5"></span>
+   </div>
+   <div class="max-w-2xl mx-auto px-5 pb-16">
+    <!-- Section 1: Header & Daily Prayer -->
+    <section class="anim-in anim-d1 pt-6 pb-8 text-center">
+     <div class="flex justify-center mb-3">
+      <svg width="40" height="40" viewbox="0 0 40 40" fill="none"><circle cx="20" cy="20" r="18" stroke="#C9A974" stroke-width="1.5" opacity="0.4" /><path d="M20 8 C20 8 14 16 14 22 C14 25.3 16.7 28 20 28 C23.3 28 26 25.3 26 22 C26 16 20 8 20 8Z" fill="#C9A974" opacity="0.25" /><path d="M20 12 C20 12 16 18 16 22 C16 24.2 17.8 26 20 26 C22.2 26 24 24.2 24 22 C24 18 20 12 20 12Z" stroke="#C9A974" stroke-width="1.2" />
+      </svg>
+     </div>
+     <h1 id="main-title" class="font-heading text-4xl font-bold mb-1" style="color: #6B5B47;">Daily Prayer &amp; Reflection</h1>
+     <p class="text-sm mt-2 opacity-60" style="color: #6B5B47;">A quiet moment with God</p>
+     <div class="mt-8 rounded-2xl p-6 text-left" style="background-color: #F5EDE3;">
+      <h2 class="font-heading text-xl font-600 mb-3 flex items-center gap-2" style="color: #6B5B47;"><i data-lucide="sun" style="width:20px;height:20px;color:#C9A974;"></i> Daily Prayer</h2>
+      <p id="daily-prayer" class="leading-relaxed italic font-heading text-lg" style="color: #7B6B57;"></p><button id="new-prayer-btn" class="mt-4 text-sm font-medium px-4 py-2 rounded-full transition-all hover:opacity-80" style="background-color: #C9A974; color: #FFFBF7;"> <span class="flex items-center gap-1"><i data-lucide="refresh-cw" style="width:14px;height:14px;"></i> New Prayer</span> </button>
+     </div>
+    </section><!-- Section 2: Scripture -->
+    <section class="anim-in anim-d2 pb-8">
+     <div class="rounded-2xl p-6 border" style="background-color: #FFFBF7; border-color: #E8DCD1;">
+      <h2 class="font-heading text-xl font-600 mb-3 flex items-center gap-2" style="color: #6B5B47;"><i data-lucide="book-open" style="width:20px;height:20px;color:#C9A974;"></i> Scripture Inspiration</h2>
+      <blockquote id="scripture-text" class="font-heading text-lg italic leading-relaxed" style="color: #7B6B57; border-left: 3px solid #C9A974; padding-left: 16px;"></blockquote>
+      <p id="scripture-ref" class="mt-2 text-sm font-medium" style="color: #C9A974;"></p><button id="new-scripture-btn" class="mt-4 text-sm font-medium px-4 py-2 rounded-full transition-all hover:opacity-80" style="background-color: #C9A974; color: #FFFBF7;"> <span class="flex items-center gap-1"><i data-lucide="refresh-cw" style="width:14px;height:14px;"></i> New Verse</span> </button>
+     </div>
+    </section><!-- Section 3: Reflection -->
+    <section class="anim-in anim-d3 pb-8">
+     <div class="rounded-2xl p-6" style="background-color: #F5EDE3;">
+      <h2 class="font-heading text-xl font-600 mb-4 flex items-center gap-2" style="color: #6B5B47;"><i data-lucide="heart" style="width:20px;height:20px;color:#C9A974;"></i> Faith Check-In &amp; Reflection</h2>
+      <div class="space-y-4">
+       <div>
+        <label class="block text-sm font-medium mb-1" style="color: #7B6B57;">How is your heart today?</label> <textarea id="reflection-heart" rows="2" class="w-full rounded-xl p-3 text-sm resize-none border" style="background-color: #FFFBF7; border-color: #E8DCD1; color: #6B5B47;" placeholder="Take a moment to check in with yourself..."></textarea>
+       </div>
+       <div>
+        <label class="block text-sm font-medium mb-1" style="color: #7B6B57;">What are you trusting God with right now?</label> <textarea id="reflection-trust" rows="2" class="w-full rounded-xl p-3 text-sm resize-none border" style="background-color: #FFFBF7; border-color: #E8DCD1; color: #6B5B47;" placeholder="Share what's on your mind..."></textarea>
+       </div>
+       <div>
+        <label class="block text-sm font-medium mb-1" style="color: #7B6B57;">Where do you need peace or guidance?</label> <textarea id="reflection-peace" rows="2" class="w-full rounded-xl p-3 text-sm resize-none border" style="background-color: #FFFBF7; border-color: #E8DCD1; color: #6B5B47;" placeholder="Lay it before God..."></textarea>
+       </div><button id="save-reflection-btn" class="text-sm font-medium px-5 py-2.5 rounded-full transition-all hover:opacity-80" style="background-color: #C9A974; color: #FFFBF7;">Save Reflection</button>
+      </div>
+     </div>
+    </section><!-- Section 4: Prayer Requests -->
+    <section class="anim-in anim-d4 pb-8">
+     <div class="rounded-2xl p-6 border" style="background-color: #FFFBF7; border-color: #E8DCD1;">
+      <h2 class="font-heading text-xl font-600 mb-4 flex items-center gap-2" style="color: #6B5B47;"><i data-lucide="message-circle" style="width:20px;height:20px;color:#C9A974;"></i> Prayer Requests</h2>
+      <div class="flex gap-2 mb-4">
+       <input id="prayer-input" type="text" class="flex-1 rounded-xl px-4 py-2.5 text-sm border" style="background-color: #FDF9F4; border-color: #E8DCD1; color: #6B5B47;" placeholder="Enter a prayer request..."> <button id="add-prayer-btn" class="px-4 py-2.5 rounded-xl text-sm font-medium transition-all hover:opacity-80" style="background-color: #C9A974; color: #FFFBF7;">Add</button>
+      </div>
+      <ul id="prayer-list" class="space-y-2"></ul>
+      <p id="prayer-empty" class="text-sm opacity-50 text-center py-3" style="color: #7B6B57;">Your prayer requests will appear here</p><button id="personalize-btn" class="mt-4 text-sm font-medium px-4 py-2 rounded-full transition-all hover:opacity-80 w-full" style="background-color: #E8DCD1; color: #6B5B47;">Get Personalized Prayer &amp; Verse</button>
+      <div id="personalized-box" style="display:none; margin-top:16px; padding:16px; border-radius:12px; background-color:#FDF9F4; border-left: 3px solid #C9A974;">
+       <p class="text-xs font-medium mb-2" style="color: #C9A974;">✨ Personalized Prayer</p>
+       <p id="personalized-prayer" class="font-heading italic text-sm leading-relaxed mb-4" style="color: #7B6B57;"></p>
+       <p class="text-xs font-medium mb-2" style="color: #C9A974;">📖 Matching Scripture</p>
+       <blockquote id="personalized-verse" class="font-heading italic text-sm leading-relaxed" style="color: #7B6B57; border-left: 3px solid #E8DCD1; padding-left: 12px;"></blockquote>
+       <p id="personalized-ref" class="mt-2 text-xs font-medium" style="color: #C9A974;"></p>
+      </div>
+     </div>
+    </section><!-- Section 5: Gratitude -->
+    <section class="anim-in anim-d5 pb-8">
+     <div class="rounded-2xl p-6" style="background-color: #F5EDE3;">
+      <h2 class="font-heading text-xl font-600 mb-4 flex items-center gap-2" style="color: #6B5B47;"><i data-lucide="leaf" style="width:20px;height:20px;color:#C9A974;"></i> Gratitude List</h2>
+      <div class="flex gap-2 mb-4">
+       <input id="gratitude-input" type="text" class="flex-1 rounded-xl px-4 py-2.5 text-sm border" style="background-color: #FFFBF7; border-color: #E8DCD1; color: #6B5B47;" placeholder="I'm thankful for..."> <button id="add-gratitude-btn" class="px-4 py-2.5 rounded-xl text-sm font-medium transition-all hover:opacity-80" style="background-color: #C9A974; color: #FFFBF7;">Add</button>
+      </div>
+      <ul id="gratitude-list" class="space-y-2"></ul>
+      <p id="gratitude-empty" class="text-sm opacity-50 text-center py-3" style="color: #7B6B57;">Count your blessings here</p>
+     </div>
+    </section><!-- Section 6: Encouragement -->
+    <section class="anim-in anim-d6 pb-12">
+     <div class="rounded-2xl p-8 text-center" style="background: linear-gradient(135deg, #F5EDE3, #E8DCD1);">
+      <svg class="mx-auto mb-3" width="32" height="32" viewbox="0 0 32 32" fill="none"><path d="M16 4L18.5 12H27L20.5 17L23 25L16 20L9 25L11.5 17L5 12H13.5L16 4Z" fill="#C9A974" opacity="0.3" /><path d="M16 6L18 12.5H25L19.5 16.5L21.5 23L16 19L10.5 23L12.5 16.5L7 12.5H14L16 6Z" stroke="#C9A974" stroke-width="1.2" />
+      </svg>
+      <p id="encouragement-msg" class="font-heading text-xl italic leading-relaxed" style="color: #6B5B47;"></p>
+     </div>
+    </section>
+   </div><!-- Toast -->
+   <div id="toast" class="fixed bottom-6 left-1/2 -translate-x-1/2 px-5 py-3 rounded-full text-sm font-medium shadow-lg transition-all opacity-0 pointer-events-none" style="background-color: #6B5B47; color: #FFFBF7;"></div>
+  </div>
+  <script>
+const prayers = [
+  "Lord, thank You for this new day. Fill my heart with gratitude and guide my steps. Help me to be a light to others and to trust in Your plan. Amen.",
+  "Heavenly Father, I come before You with a grateful heart. Grant me wisdom, patience, and strength to face whatever this day brings. Amen.",
+  "Dear God, quiet my anxious thoughts and fill me with Your peace. Remind me that I am never alone and that Your love surrounds me always. Amen.",
+  "Father, help me to see Your blessings in every moment today. Open my eyes to the beauty around me and my heart to those who need kindness. Amen.",
+  "Lord, I surrender my worries to You. Replace my fears with faith and my doubts with trust. Lead me closer to You today. Amen.",
+  "God of all comfort, wrap me in Your grace today. Help me to forgive freely, love deeply, and walk humbly in Your ways. Amen."
+];
+
+const scriptures = [
+  { text: "For I know the plans I have for you, declares the Lord, plans to prosper you and not to harm you, plans to give you hope and a future.", ref: "Jeremiah 29:11" },
+  { text: "The Lord is my shepherd; I shall not want. He makes me lie down in green pastures. He leads me beside still waters. He restores my soul.", ref: "Psalm 23:1-3" },
+  { text: "Trust in the Lord with all your heart, and do not lean on your own understanding. In all your ways acknowledge Him, and He will make straight your paths.", ref: "Proverbs 3:5-6" },
+  { text: "Be strong and courageous. Do not be afraid; do not be discouraged, for the Lord your God will be with you wherever you go.", ref: "Joshua 1:9" },
+  { text: "Cast all your anxiety on Him because He cares for you.", ref: "1 Peter 5:7" },
+  { text: "And we know that in all things God works for the good of those who love Him, who have been called according to His purpose.", ref: "Romans 8:28" },
+  { text: "Come to me, all you who are weary and burdened, and I will give you rest.", ref: "Matthew 11:28" },
+  { text: "The Lord is close to the brokenhearted and saves those who are crushed in spirit.", ref: "Psalm 34:18" }
+];
+
+const encouragements = [
+  "You are deeply loved by a God who knows every detail of your life. Rest in that truth today.",
+  "Whatever you're carrying, remember: God's grace is sufficient. You don't have to do this alone.",
+  "Today's worries are tomorrow's testimonies. Keep trusting — He is faithful.",
+  "You are seen, you are known, and you are cherished beyond measure. Walk in that confidence.",
+  "God is writing a beautiful story with your life. Even the hard chapters have purpose.",
+  "May peace guard your heart and hope light your way. You are braver than you know."
+];
+
+// Topic-based prayers and verses
+const topicPrayers = {
+  healing: "Dear Lord, I lift up this need for healing to You. Grant strength to the body, peace to the mind, and restoration to the spirit. Surround with Your love and comfort. Amen.",
+  health: "Father, I trust You with this health concern. Guide the doctors, steady the treatment, and grant wisdom and healing. Your mercies are new every morning. Amen.",
+  surgery: "Lord, I place this surgery and recovery in Your hands. Grant steady hands to those caring for this person, and surround them with Your protection and grace. Amen.",
+  strength: "Almighty God, grant me the strength I need for this season. When I am weak, remind me that You are strong. Help me to trust in Your power, not my own. Amen.",
+  peace: "Father of Peace, quiet my anxious heart. Replace my worries with Your presence and my fears with faith. Let Your perfect peace reign over me. Amen.",
+  wisdom: "God of Wisdom, I ask for clear guidance and discernment. Open my eyes to see Your truth and my heart to hear Your voice. Lead me on the right path. Amen.",
+  family: "Loving Father, bless my family and those I hold dear. Draw us closer together and closer to You. Heal any brokenness and strengthen our bonds. Amen.",
+  work: "Lord, guide me in my work and help me to honor You in all I do. Grant me patience, creativity, and the right words to speak. Bless my efforts. Amen.",
+  guidance: "Heavenly Father, I need Your direction. Show me the way forward and give me courage to follow. Help me trust Your plan even when the path is unclear. Amen.",
+  gratitude: "Thank You, Lord, for Your endless blessings and faithfulness. Help me to recognize Your hand in my life and to share Your joy with others. Amen."
+};
+
+const topicScriptures = {
+  healing: { text: "He heals the brokenhearted and binds up their wounds.", ref: "Psalm 147:3" },
+  health: { text: "Beloved, I pray that you may prosper in all things and be in health, just as your soul prospers.", ref: "3 John 1:2" },
+  surgery: { text: "The Lord is my light and my salvation—whom shall I fear? The Lord is the stronghold of my life—of whom shall I be afraid?", ref: "Psalm 27:1" },
+  strength: { text: "I can do all this through Christ who gives me strength.", ref: "Philippians 4:13" },
+  peace: { text: "Peace I leave with you; my peace I give you. I do not give to you as the world gives.", ref: "John 14:27" },
+  wisdom: { text: "If any of you lacks wisdom, you should ask God, who gives generously to all without finding fault, and it will be given to you.", ref: "James 1:5" },
+  family: { text: "As for me and my household, we will serve the Lord.", ref: "Joshua 24:15" },
+  work: { text: "Whatever you do, work at it with all your heart, as working for the Lord, not for human masters, since you know that you will receive an inheritance from the Lord as a reward. It is the Lord Christ you are serving.", ref: "Colossians 3:23-24" },
+  guidance: { text: "Trust in the Lord with all your heart, and do not lean on your own understanding. In all your ways acknowledge Him, and He will make straight your paths.", ref: "Proverbs 3:5-6" },
+  gratitude: { text: "Give thanks in all circumstances; for this is God's will for you in Christ Jesus.", ref: "1 Thessalonians 5:18" }
+};
+
+function findTopicMatch(text) {
+  const lower = text.toLowerCase();
+  for (const topic of Object.keys(topicPrayers)) {
+    if (lower.includes(topic)) return topic;
+  }
+  return null;
+}
+
+function generatePersonalPrayer(prayerRequest) {
+  const topic = findTopicMatch(prayerRequest);
+  if (topic && topicPrayers[topic]) {
+    return topicPrayers[topic];
+  }
+  return `Lord, I lift up this prayer request to You: "${prayerRequest}". Hear my cry and respond according to Your wisdom and love. Amen.`;
+}
+
+function findMatchingVerse(prayerRequest) {
+  const topic = findTopicMatch(prayerRequest);
+  if (topic && topicScriptures[topic]) {
+    return topicScriptures[topic];
+  }
+  return rand(scriptures);
+}
+
+function rand(arr) { return arr[Math.floor(Math.random() * arr.length)]; }
+
+// State
+let allData = [];
+let currentRecordCount = 0;
+
+const defaultConfig = {
+  main_title: "Daily Prayer & Reflection",
+  encouragement_text: "",
+  background_color: "#FDF9F4",
+  surface_color: "#F5EDE3",
+  text_color: "#6B5B47",
+  accent_color: "#C9A974",
+  card_color: "#FFFBF7",
+  font_family: "Cormorant Garamond",
+  font_size: 16
+};
+
+// Show toast
+function showToast(msg) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.opacity = '1';
+  setTimeout(() => { t.style.opacity = '0'; }, 2000);
+}
+
+// Set random content
+function setRandomPrayer() { document.getElementById('daily-prayer').textContent = rand(prayers); }
+function setRandomScripture() {
+  const s = rand(scriptures);
+  document.getElementById('scripture-text').textContent = s.text;
+  document.getElementById('scripture-ref').textContent = '— ' + s.ref;
+}
+function setEncouragement(config) {
+  const el = document.getElementById('encouragement-msg');
+  el.textContent = (config && config.encouragement_text) || rand(encouragements);
+}
+
+// Render lists
+function renderList(type) {
+  const items = allData.filter(d => d.type === type);
+  const listEl = document.getElementById(type + '-list');
+  const emptyEl = document.getElementById(type + '-empty');
+  const existingMap = new Map([...listEl.children].map(el => [el.dataset.id, el]));
+
+  items.forEach(item => {
+    if (existingMap.has(item.__backendId)) {
+      const el = existingMap.get(item.__backendId);
+      el.querySelector('.item-text').textContent = item.content;
+      existingMap.delete(item.__backendId);
+    } else {
+      const li = document.createElement('li');
+      li.dataset.id = item.__backendId;
+      li.className = 'flex items-center justify-between rounded-xl px-4 py-3 text-sm';
+      li.style.cssText = 'background-color:#FFFBF7;color:#6B5B47;';
+      if (type === 'gratitude') li.style.backgroundColor = '#FDF9F4';
+
+      const span = document.createElement('span');
+      span.className = 'item-text flex-1';
+      span.textContent = item.content;
+
+      const btn = document.createElement('button');
+      btn.className = 'ml-2 opacity-40 hover:opacity-100 transition-opacity';
+      btn.innerHTML = '<i data-lucide="x" style="width:16px;height:16px;"></i>';
+      btn.onclick = async () => {
+        btn.disabled = true;
+        const r = await window.dataSdk.delete(item);
+        if (!r.isOk) showToast('Could not remove item');
+        btn.disabled = false;
+      };
+
+      li.appendChild(span);
+      li.appendChild(btn);
+      listEl.appendChild(li);
+      lucide.createIcons();
+    }
+  });
+
+  existingMap.forEach(el => el.remove());
+  emptyEl.style.display = items.length ? 'none' : 'block';
+}
+
+// Update step dots
+function updateSteps() {
+  const app = document.getElementById('app');
+  const sections = app.querySelectorAll('section');
+  const scrollTop = app.scrollTop;
+  const midpoint = scrollTop + app.clientHeight / 2;
+  let activeIdx = 0;
+  sections.forEach((s, i) => { if (s.offsetTop <= midpoint) activeIdx = i; });
+  document.querySelectorAll('.step-dot').forEach((dot, i) => {
+    dot.style.backgroundColor = i <= activeIdx ? '#B49B78' : '#D5C9B8';
+    dot.classList.toggle('active', i === activeIdx);
+  });
+}
+
+// Init
+setRandomPrayer();
+setRandomScripture();
+setEncouragement(defaultConfig);
+
+document.getElementById('new-prayer-btn').onclick = setRandomPrayer;
+document.getElementById('new-scripture-btn').onclick = setRandomScripture;
+document.getElementById('app').addEventListener('scroll', updateSteps);
+
+// Add prayer request
+async function addItem(type, inputId) {
+  const input = document.getElementById(inputId);
+  const val = input.value.trim();
+  if (!val) return;
+  if (currentRecordCount >= 999) { showToast('Storage limit reached. Please remove some items.'); return; }
+  input.disabled = true;
+  const r = await window.dataSdk.create({ type, content: val, created_at: new Date().toISOString() });
+  if (r.isOk) { input.value = ''; showToast('Saved ✓'); } else { showToast('Could not save'); }
+  input.disabled = false;
+}
+
+document.getElementById('add-prayer-btn').onclick = () => addItem('prayer', 'prayer-input');
+document.getElementById('prayer-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addItem('prayer', 'prayer-input'); } });
+document.getElementById('add-gratitude-btn').onclick = () => addItem('gratitude', 'gratitude-input');
+document.getElementById('gratitude-input').addEventListener('keydown', e => { if (e.key === 'Enter') { e.preventDefault(); addItem('gratitude', 'gratitude-input'); } });
+
+// Personalize button
+document.getElementById('personalize-btn').onclick = () => {
+  const prayerInput = document.getElementById('prayer-input').value.trim();
+  if (!prayerInput) { showToast('Enter a prayer request first'); return; }
+  
+  const prayer = generatePersonalPrayer(prayerInput);
+  const verse = findMatchingVerse(prayerInput);
+  
+  document.getElementById('personalized-prayer').textContent = prayer;
+  document.getElementById('personalized-verse').textContent = verse.text;
+  document.getElementById('personalized-ref').textContent = '— ' + verse.ref;
+  document.getElementById('personalized-box').style.display = 'block';
+};
+
+// Save reflection
+document.getElementById('save-reflection-btn').onclick = async () => {
+  const heart = document.getElementById('reflection-heart').value.trim();
+  const trust = document.getElementById('reflection-trust').value.trim();
+  const peace = document.getElementById('reflection-peace').value.trim();
+  if (!heart && !trust && !peace) { showToast('Write something first'); return; }
+  if (currentRecordCount >= 999) { showToast('Storage limit reached'); return; }
+  const btn = document.getElementById('save-reflection-btn');
+  btn.disabled = true; btn.textContent = 'Saving...';
+  const content = [heart && `Heart: ${heart}`, trust && `Trust: ${trust}`, peace && `Peace: ${peace}`].filter(Boolean).join(' | ');
+  const r = await window.dataSdk.create({ type: 'reflection', content, created_at: new Date().toISOString() });
+  if (r.isOk) {
+    showToast('Reflection saved ✓');
+    document.getElementById('reflection-heart').value = '';
+    document.getElementById('reflection-trust').value = '';
+    document.getElementById('reflection-peace').value = '';
+  } else { showToast('Could not save'); }
+  btn.disabled = false; btn.textContent = 'Save Reflection';
+};
+
+// Data SDK
+const dataHandler = {
+  onDataChanged(data) {
+    allData = data;
+    currentRecordCount = data.length;
+    renderList('prayer');
+    renderList('gratitude');
+  }
+};
+
+(async () => {
+  const initResult = await window.dataSdk.init(dataHandler);
+  if (!initResult.isOk) {
+    console.error('Data SDK init failed:', initResult.error);
+  }
+})();
+
+// Element SDK
+function applyConfig(config) {
+  document.getElementById('main-title').textContent = config.main_title || defaultConfig.main_title;
+  if (config.encouragement_text) {
+    document.getElementById('encouragement-msg').textContent = config.encouragement_text;
+  }
+
+  const bg = config.background_color || defaultConfig.background_color;
+  const surface = config.surface_color || defaultConfig.surface_color;
+  const text = config.text_color || defaultConfig.text_color;
+  const accent = config.accent_color || defaultConfig.accent_color;
+  const card = config.card_color || defaultConfig.card_color;
+
+  document.documentElement.style.backgroundColor = bg;
+  document.body.style.backgroundColor = bg;
+  document.getElementById('app').style.backgroundColor = bg;
+
+  const font = config.font_family || defaultConfig.font_family;
+  const baseSize = config.font_size || defaultConfig.font_size;
+  document.getElementById('main-title').style.fontFamily = `${font}, Georgia, serif`;
+  document.getElementById('main-title').style.fontSize = `${baseSize * 2.25}px`;
+  document.getElementById('daily-prayer').style.fontSize = `${baseSize * 1.125}px`;
+  document.getElementById('scripture-text').style.fontSize = `${baseSize * 1.125}px`;
+  document.getElementById('encouragement-msg').style.fontFamily = `${font}, Georgia, serif`;
+  document.getElementById('encouragement-msg').style.fontSize = `${baseSize * 1.25}px`;
+
+  // Apply accent color to buttons
+  document.querySelectorAll('button[style*="background-color: #B49B78"], button[style*="background-color: ' + accent + '"]').forEach(b => {
+    b.style.backgroundColor = accent;
+  });
+}
+
+window.elementSdk.init({
+  defaultConfig,
+  onConfigChange: async (config) => { applyConfig(config); },
+  mapToCapabilities: (config) => ({
+    recolorables: [
+      { get: () => config.background_color || defaultConfig.background_color, set: (v) => { config.background_color = v; window.elementSdk.setConfig({ background_color: v }); } },
+      { get: () => config.surface_color || defaultConfig.surface_color, set: (v) => { config.surface_color = v; window.elementSdk.setConfig({ surface_color: v }); } },
+      { get: () => config.text_color || defaultConfig.text_color, set: (v) => { config.text_color = v; window.elementSdk.setConfig({ text_color: v }); } },
+      { get: () => config.accent_color || defaultConfig.accent_color, set: (v) => { config.accent_color = v; window.elementSdk.setConfig({ accent_color: v }); } },
+      { get: () => config.card_color || defaultConfig.card_color, set: (v) => { config.card_color = v; window.elementSdk.setConfig({ card_color: v }); } }
+    ],
+    borderables: [],
+    fontEditable: { get: () => config.font_family || defaultConfig.font_family, set: (v) => { config.font_family = v; window.elementSdk.setConfig({ font_family: v }); } },
+    fontSizeable: { get: () => config.font_size || defaultConfig.font_size, set: (v) => { config.font_size = v; window.elementSdk.setConfig({ font_size: v }); } }
+  }),
+  mapToEditPanelValues: (config) => new Map([
+    ["main_title", config.main_title || defaultConfig.main_title],
+    ["encouragement_text", config.encouragement_text || ""]
+  ])
+});
+
+lucide.createIcons();
+</script>
+ <script>(function(){function c(){var b=a.contentDocument||a.contentWindow.document;if(b){var d=b.createElement('script');d.innerHTML="window.__CF$cv$params={r:'9f69ad3835e44688',t:'MTc3NzkyMDQ3NS4wMDAwMDA='};var a=document.createElement('script');a.nonce='';a.src='/cdn-cgi/challenge-platform/scripts/jsd/main.js';document.getElementsByTagName('head')[0].appendChild(a);";b.getElementsByTagName('head')[0].appendChild(d)}}if(document.body){var a=document.createElement('iframe');a.height=1;a.width=1;a.style.position='absolute';a.style.top=0;a.style.left=0;a.style.border='none';a.style.visibility='hidden';document.body.appendChild(a);if('loading'!==document.readyState)c();else if(window.addEventListener)document.addEventListener('DOMContentLoaded',c);else{var e=document.onreadystatechange||function(){};document.onreadystatechange=function(b){e(b);'loading'!==document.readyState&&(document.onreadystatechange=e,c())}}}})();</script></body>
+</html>
