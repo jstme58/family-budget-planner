@@ -504,24 +504,62 @@ body::before {
 
   <!-- ── CTA ── -->
   <section class="section fade-up" id="enskri">
-    <h2 class="section-title">Rezève <span style="color:var(--gold)">Plas Ou</span></h2>
+    <h2 class="section-title">Chwazi <span style="color:var(--gold)">Opsyon Ou</span></h2>
     <div class="gold-bar"></div>
-    <div class="cta-box">
-      <p class="cb-original">Valè Total Pwogram nan: $1,682</p>
-      <div class="cb-deposit">$297</div>
-      <p class="cb-sub">Depozit rezèvasyon jodi a sèlman</p>
-      <p class="cb-rest">+ <strong>$500</strong> nan 7 jou · Total: $797</p>
-      <div class="savings-badge">✓ Ou ekonomize $885 — 65% rabè · Garanti 14 jou</div>
 
-      <a href="https://buy.stripe.com/5kQ7sNboG4eEcpdfRRao806" class="cta-btn">
-        ✓ Rezève Plas Mwen — $297 Jodi a →
-      </a>
-      <div class="stripe-note">
-        <span>🔒</span> Pèman sécurisé pa Stripe · Kat kredi oswa débit aksepte
+    <p style="text-align:center;color:var(--muted);font-size:0.85rem;margin-bottom:1.8rem;">
+      <span style="text-decoration:line-through;color:var(--muted);">Valè Total: $1,682</span> &nbsp;·&nbsp;
+      <span style="color:var(--green);font-weight:700;">Ou ekonomize $885 — 65% rabè</span>
+    </p>
+
+    <!-- 3 OPSYON CARDS -->
+    <div style="display:flex;flex-direction:column;gap:14px;margin-bottom:2rem;">
+
+      <!-- OPSYON 1 — Depozit -->
+      <div class="plan-option" id="opt-deposit" onclick="selectOpt('deposit')" style="cursor:pointer;background:var(--navy2);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.2rem 1.4rem;display:flex;align-items:center;gap:1rem;transition:border-color 0.2s;">
+        <div class="opt-radio" id="r-deposit" style="width:22px;height:22px;border-radius:50%;border:2px solid var(--muted);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;"></div>
+        <div style="flex:1;">
+          <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;color:var(--muted);margin-bottom:4px;">OPSYON 1 — DEPOZIT</div>
+          <div style="font-size:1.1rem;font-weight:700;color:var(--white);">$297 <span style="font-size:0.8rem;color:var(--muted);font-weight:400;">jodi a + $500 nan 7 jou</span></div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:2px;">Total: $797 · Kòmanse piti, peye rès la apre</div>
+        </div>
       </div>
 
-      <div style="margin-top:1.5rem;padding:1rem;background:var(--navy);border-radius:10px;font-size:0.8rem;color:var(--muted);line-height:1.6;">
-        ⏰ <strong style="color:var(--white);">Rapèl:</strong> Ofri sa a disponib pou 48 èd tan sèlman. Apre sa, pòt rezèvasyon an fèmen epi pri a retounen a $797 pèman konplè.
+      <!-- OPSYON 2 — 2 Pèman -->
+      <div class="plan-option" id="opt-split" onclick="selectOpt('split')" style="cursor:pointer;background:var(--navy2);border:1px solid rgba(255,255,255,0.08);border-radius:14px;padding:1.2rem 1.4rem;display:flex;align-items:center;gap:1rem;transition:border-color 0.2s;">
+        <div class="opt-radio" id="r-split" style="width:22px;height:22px;border-radius:50%;border:2px solid var(--muted);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;"></div>
+        <div style="flex:1;">
+          <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;color:var(--muted);margin-bottom:4px;">OPSYON 2 — PLAN PÈMAN</div>
+          <div style="font-size:1.1rem;font-weight:700;color:var(--white);">2 × $447 <span style="font-size:0.8rem;color:var(--muted);font-weight:400;">· Total: $894</span></div>
+          <div style="font-size:0.75rem;color:var(--muted);margin-top:2px;">1e pèman jodi a · 2e pèman nan 30 jou</div>
+        </div>
+      </div>
+
+      <!-- OPSYON 3 — Pèman Konplè -->
+      <div class="plan-option" id="opt-full" onclick="selectOpt('full')" style="cursor:pointer;background:var(--navy2);border:2px solid var(--gold);border-radius:14px;padding:1.2rem 1.4rem;display:flex;align-items:center;gap:1rem;transition:border-color 0.2s;position:relative;overflow:hidden;">
+        <div style="position:absolute;top:0;right:0;background:var(--gold);color:var(--navy);font-size:0.65rem;font-weight:700;padding:3px 10px;border-radius:0 0 0 8px;letter-spacing:0.08em;">🏆 PI EKONOMIK</div>
+        <div class="opt-radio" id="r-full" style="width:22px;height:22px;border-radius:50%;border:2px solid var(--gold);flex-shrink:0;display:flex;align-items:center;justify-content:center;transition:all 0.2s;background:var(--gold);">
+          <div style="width:10px;height:10px;border-radius:50%;background:var(--navy);"></div>
+        </div>
+        <div style="flex:1;">
+          <div style="font-size:0.7rem;font-weight:700;letter-spacing:0.1em;color:var(--gold);margin-bottom:4px;">OPSYON 3 — PÈMAN KONPLÈ</div>
+          <div style="font-size:1.3rem;font-weight:700;color:var(--gold);">$797 <span style="font-size:0.8rem;color:var(--muted);font-weight:400;">yon sèl pèman</span></div>
+          <div style="font-size:0.75rem;color:var(--green);margin-top:2px;">✓ Ekonomize $97 pou rapport plan pèman · Aksè imedya</div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- CTA BUTTON -->
+    <div style="text-align:center;">
+      <a href="https://buy.stripe.com/5kQ7sNboG4eEcpdfRRao806" class="cta-btn" id="cta-main" style="max-width:500px;display:block;margin:0 auto;">
+        ✓ Enskri Kounye a — $797 →
+      </a>
+      <div class="stripe-note" style="margin-top:10px;">
+        <span>🔒</span> Pèman sécurisé pa Stripe · Kat kredi oswa débit aksepte
+      </div>
+      <div style="margin-top:1.2rem;padding:1rem;background:var(--navy2);border-radius:10px;font-size:0.78rem;color:var(--muted);line-height:1.6;">
+        ⏰ <strong style="color:var(--white);">Rapèl:</strong> Ofri sa a disponib pou 48 èd tan sèlman. Apre sa, pòt la fèmen.
       </div>
     </div>
   </section>
