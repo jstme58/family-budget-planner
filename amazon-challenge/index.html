@@ -600,6 +600,34 @@ body::before {
 </div>
 
 <script>
+  // ── PLAN SELECTOR ──
+  const plans = {
+    deposit: { label: "✓ Rezève Plas Mwen — $297 Jodi a →", href: "https://buy.stripe.com/5kQ7sNboG4eEcpdfRRao806" },
+    split:   { label: "✓ Kòmanse avèk $447 Jodi a →",       href: "https://buy.stripe.com/00w8wRgJ026wexl8ppao808" },
+    full:    { label: "✓ Peye Konplè — $797 →",              href: "https://buy.stripe.com/9B6cN70K2h1qah5gVVao807" }
+  };
+
+  function selectOpt(plan) {
+    ["deposit","split","full"].forEach(function(p) {
+      var card  = document.getElementById("opt-" + p);
+      var radio = document.getElementById("r-" + p);
+      var isSelected = (p === plan);
+      var isFull = (p === "full");
+      card.style.borderWidth = isFull ? "2px" : "1px";
+      card.style.borderStyle = "solid";
+      card.style.borderColor = isSelected ? "var(--gold)" : (isFull ? "rgba(245,166,35,0.3)" : "rgba(255,255,255,0.08)");
+      radio.style.background  = isSelected ? "var(--gold)" : "transparent";
+      radio.style.borderColor = isSelected ? "var(--gold)" : "var(--muted)";
+      radio.innerHTML = isSelected ? "<div style='width:10px;height:10px;border-radius:50%;background:var(--navy);'></div>" : "";
+    });
+    var btn = document.getElementById("cta-main");
+    btn.textContent = plans[plan].label;
+    btn.href = plans[plan].href;
+  }
+
+  // Default: full payment selected
+  selectOpt("full");
+
   // ── COUNTDOWN 48h ──
   const deadline = Date.now() + 48 * 60 * 60 * 1000;
   function updateCountdown() {
