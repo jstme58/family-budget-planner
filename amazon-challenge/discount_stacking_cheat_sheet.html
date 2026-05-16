@@ -1,0 +1,742 @@
+<!DOCTYPE html>
+<html lang="ht">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Discount Stacking Cheat Sheet — E Pelissier Enterprises</title>
+<link href="https://fonts.googleapis.com/css2?family=Bebas+Neue&family=DM+Mono:wght@400;500&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet">
+<style>
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --navy:  #08111F;
+  --navy2: #0D1F3C;
+  --gold:  #F5A623;
+  --lgold: #FDE68A;
+  --green: #10B981;
+  --blue:  #3B82F6;
+  --purple:#8B5CF6;
+  --pink:  #EC4899;
+  --white: #FFFFFF;
+  --muted: #94A3B8;
+  --light: #F0F6FF;
+}
+
+body {
+  background: var(--navy);
+  font-family: 'Syne', sans-serif;
+  color: var(--white);
+  min-height: 100vh;
+  padding: 2rem;
+}
+
+/* ── PRINT ── */
+@media print {
+  body { background: #fff; color: #000; padding: 0; }
+  .sheet { box-shadow: none !important; border: 1px solid #ddd !important; }
+  .print-btn { display: none !important; }
+  @page { margin: 0.5cm; size: A4; }
+}
+
+/* ── PRINT BUTTON ── */
+.print-btn {
+  position: fixed; top: 1.5rem; right: 1.5rem;
+  background: var(--gold); color: var(--navy);
+  font-family: 'Syne', sans-serif; font-size: 0.8rem; font-weight: 700;
+  padding: 8px 18px; border-radius: 8px; border: none;
+  cursor: pointer; z-index: 100;
+  box-shadow: 0 4px 16px rgba(245,166,35,0.4);
+  transition: transform 0.15s;
+}
+.print-btn:hover { transform: translateY(-2px); }
+
+/* ── SHEET ── */
+.sheet {
+  max-width: 900px; margin: 0 auto;
+  background: var(--navy);
+  border: 1px solid rgba(245,166,35,0.2);
+  border-radius: 20px;
+  overflow: hidden;
+  box-shadow: 0 30px 80px rgba(0,0,0,0.5);
+}
+
+/* ── HEADER ── */
+.header {
+  background: linear-gradient(135deg, var(--navy2) 0%, #0A1E3D 100%);
+  padding: 2rem 2.5rem 1.5rem;
+  border-bottom: 2px solid var(--gold);
+  position: relative; overflow: hidden;
+}
+.header::before {
+  content: '';
+  position: absolute; top: -60px; right: -60px;
+  width: 250px; height: 250px; border-radius: 50%;
+  background: radial-gradient(circle, rgba(245,166,35,0.08), transparent 70%);
+}
+.header-top {
+  display: flex; justify-content: space-between; align-items: flex-start;
+  margin-bottom: 0.5rem;
+}
+.header .brand {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.15em;
+  color: var(--gold); text-transform: uppercase; opacity: 0.8;
+}
+.header .badge {
+  background: rgba(245,166,35,0.15); border: 1px solid rgba(245,166,35,0.3);
+  color: var(--gold); font-size: 0.65rem; font-weight: 700;
+  padding: 3px 10px; border-radius: 99px; letter-spacing: 0.08em;
+}
+.header h1 {
+  font-family: 'Bebas Neue', sans-serif;
+  font-size: clamp(2.2rem, 6vw, 3.8rem);
+  color: var(--white); line-height: 1; margin-bottom: 0.3rem;
+}
+.header h1 span { color: var(--gold); }
+.header .sub { font-size: 0.85rem; color: var(--muted); }
+.header .formula {
+  display: flex; align-items: center; gap: 8px;
+  margin-top: 1rem; flex-wrap: wrap;
+}
+.formula-item {
+  background: rgba(255,255,255,0.06); border: 1px solid rgba(255,255,255,0.1);
+  border-radius: 8px; padding: 5px 12px;
+  font-family: 'DM Mono', monospace; font-size: 0.75rem; color: var(--white);
+}
+.formula-op { color: var(--gold); font-size: 1.1rem; font-weight: 700; }
+.formula-result {
+  background: var(--gold); color: var(--navy);
+  border-radius: 8px; padding: 5px 12px;
+  font-family: 'DM Mono', monospace; font-size: 0.75rem; font-weight: 700;
+}
+
+/* ── BODY ── */
+.body { padding: 1.5rem 2.5rem 2rem; }
+
+/* ── GRID ── */
+.grid { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+.grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 14px; margin-bottom: 14px; }
+
+/* ── SECTION CARD ── */
+.card {
+  background: rgba(255,255,255,0.03);
+  border: 0.5px solid rgba(255,255,255,0.08);
+  border-radius: 14px; padding: 1.1rem 1.2rem;
+  position: relative; overflow: hidden;
+}
+.card::before {
+  content: ''; position: absolute; top: 0; left: 0; right: 0; height: 3px;
+}
+.card.gold::before { background: var(--gold); }
+.card.green::before { background: var(--green); }
+.card.blue::before { background: var(--blue); }
+.card.purple::before { background: var(--purple); }
+.card.pink::before { background: var(--pink); }
+.card.teal::before { background: #14B8A6; }
+
+.card-head {
+  display: flex; align-items: center; gap: 8px; margin-bottom: 0.8rem;
+}
+.card-ico { font-size: 1.3rem; }
+.card-title { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.08em; }
+.card.gold .card-title { color: var(--gold); }
+.card.green .card-title { color: #34D399; }
+.card.blue .card-title { color: #60A5FA; }
+.card.purple .card-title { color: #A78BFA; }
+.card.pink .card-title { color: #F9A8D4; }
+.card.teal .card-title { color: #2DD4BF; }
+
+/* ── ROW ITEMS ── */
+.item { display: flex; align-items: center; justify-content: space-between; padding: 5px 0; border-bottom: 0.5px solid rgba(255,255,255,0.05); }
+.item:last-child { border-bottom: none; }
+.item-left { display: flex; align-items: center; gap: 8px; }
+.item-dot { width: 6px; height: 6px; border-radius: 50%; flex-shrink: 0; }
+.item-name { font-size: 0.8rem; color: var(--white); }
+.item-detail { font-size: 0.72rem; color: var(--muted); margin-top: 1px; }
+.item-badge {
+  font-family: 'DM Mono', monospace;
+  font-size: 0.72rem; font-weight: 500;
+  padding: 2px 8px; border-radius: 6px; white-space: nowrap;
+}
+.badge-gold { background: rgba(245,166,35,0.15); color: var(--gold); }
+.badge-green { background: rgba(16,185,129,0.15); color: #34D399; }
+.badge-blue { background: rgba(59,130,246,0.15); color: #60A5FA; }
+.badge-purple { background: rgba(139,92,246,0.15); color: #A78BFA; }
+.badge-pink { background: rgba(236,72,153,0.15); color: #F9A8D4; }
+.badge-teal { background: rgba(20,184,166,0.15); color: #2DD4BF; }
+
+/* ── EXAMPLE BOX ── */
+.example-box {
+  background: linear-gradient(135deg, rgba(245,166,35,0.06), rgba(245,166,35,0.02));
+  border: 1px solid rgba(245,166,35,0.2);
+  border-radius: 14px; padding: 1.2rem 1.5rem; margin-bottom: 14px;
+}
+.example-title {
+  font-size: 0.7rem; font-weight: 700; letter-spacing: 0.12em;
+  color: var(--gold); text-transform: uppercase; margin-bottom: 0.8rem;
+  display: flex; align-items: center; gap: 6px;
+}
+.calc-grid {
+  display: grid; grid-template-columns: repeat(5, 1fr);
+  gap: 6px; align-items: center;
+}
+.calc-step {
+  background: var(--navy2); border-radius: 8px;
+  padding: 8px 6px; text-align: center;
+}
+.calc-step .cs-label { font-size: 0.6rem; color: var(--muted); margin-bottom: 3px; letter-spacing: 0.05em; }
+.calc-step .cs-val { font-family: 'DM Mono', monospace; font-size: 0.95rem; font-weight: 500; color: var(--white); }
+.calc-step .cs-sub { font-size: 0.58rem; color: var(--muted); margin-top: 2px; }
+.calc-arrow { text-align: center; color: var(--gold); font-size: 1rem; }
+.calc-final {
+  background: var(--gold); border-radius: 8px;
+  padding: 8px 6px; text-align: center;
+}
+.calc-final .cs-label { font-size: 0.6rem; color: rgba(8,17,31,0.7); margin-bottom: 3px; }
+.calc-final .cs-val { font-family: 'DM Mono', monospace; font-size: 1.1rem; font-weight: 700; color: var(--navy); }
+.calc-final .cs-sub { font-size: 0.58rem; color: rgba(8,17,31,0.6); margin-top: 2px; }
+
+/* ── TIPS ── */
+.tips-grid { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+.tip {
+  background: rgba(255,255,255,0.03); border-radius: 10px;
+  padding: 0.8rem 1rem; border: 0.5px solid rgba(255,255,255,0.06);
+  display: flex; gap: 8px; align-items: flex-start;
+}
+.tip-ico { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+.tip-text { font-size: 0.75rem; color: var(--muted); line-height: 1.5; }
+.tip-text strong { color: var(--white); display: block; margin-bottom: 2px; font-size: 0.78rem; }
+
+/* ── FOOTER ── */
+.footer {
+  border-top: 1px solid rgba(255,255,255,0.06);
+  padding: 1rem 2.5rem;
+  display: flex; justify-content: space-between; align-items: center;
+}
+.footer .fl { font-size: 0.7rem; color: var(--muted); }
+.footer .fr { font-size: 0.7rem; color: var(--gold); font-weight: 700; }
+</style>
+</head>
+<body>
+
+<button class="print-btn" onclick="printSheet()">🖨️ Enprime / Sove PDF</button>
+
+<div class="sheet">
+
+  <!-- ── HEADER ── -->
+  <div class="header">
+    <div class="header-top">
+      <span class="brand">E Pelissier Enterprises · 30 Jou Amazon Challenge</span>
+      <span class="badge">BONIS EKSKIZIF</span>
+    </div>
+    <h1>DISCOUNT<br><span>STACKING</span><br>CHEAT SHEET</h1>
+    <p class="sub">Chak zouti, chak sous, chak teknik — sou yon sèl paj. Itilize yo ansanm pou maksimize pwofi ou.</p>
+    <div class="formula">
+      <div class="formula-item">BOGO</div>
+      <div class="formula-op">+</div>
+      <div class="formula-item">% Promo</div>
+      <div class="formula-op">+</div>
+      <div class="formula-item">Gift Card</div>
+      <div class="formula-op">+</div>
+      <div class="formula-item">Cashback</div>
+      <div class="formula-op">=</div>
+      <div class="formula-result">💰 Maksimòm Pwofi</div>
+    </div>
+  </div>
+
+  <div class="body">
+
+    <!-- ── EXAMPLE ── -->
+    <div class="example-box">
+      <div class="example-title">⚡ Egzanp Reyèl — Nature Made (Walgreens)</div>
+      <div class="calc-grid">
+        <div class="calc-step">
+          <div class="cs-label">Pri Ori</div>
+          <div class="cs-val">$54.99</div>
+          <div class="cs-sub">BOGO ÷ 2</div>
+        </div>
+        <div class="calc-arrow">→</div>
+        <div class="calc-step">
+          <div class="cs-label">Apre BOGO</div>
+          <div class="cs-val">$27.50</div>
+          <div class="cs-sub">÷2</div>
+        </div>
+        <div class="calc-arrow">→</div>
+        <div class="calc-step">
+          <div class="cs-label">−20% Promo</div>
+          <div class="cs-val">$22.00</div>
+          <div class="cs-sub">×0.80</div>
+        </div>
+        <div class="calc-arrow">→</div>
+        <div class="calc-step">
+          <div class="cs-label">−11% Gift Card</div>
+          <div class="cs-val">$19.58</div>
+          <div class="cs-sub">×0.89</div>
+        </div>
+        <div class="calc-arrow">→</div>
+        <div class="calc-step">
+          <div class="cs-label">−4% Cashback</div>
+          <div class="cs-val">$18.80</div>
+          <div class="cs-sub">×0.96</div>
+        </div>
+        <div class="calc-arrow">→</div>
+        <div class="calc-final">
+          <div class="cs-label">Pri Final</div>
+          <div class="cs-val">$18.80</div>
+          <div class="cs-sub">vs $43.99 ori</div>
+        </div>
+        <div class="calc-arrow">→</div>
+        <div class="calc-final" style="background:var(--green);">
+          <div class="cs-label">Vann a $55</div>
+          <div class="cs-val">$23.59</div>
+          <div class="cs-sub">Pwofi / inite</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ── LAYER 1 + 2 ── -->
+    <div class="grid">
+
+      <!-- LAYER 1: PROMO BOUTIK -->
+      <div class="card gold">
+        <div class="card-head">
+          <span class="card-ico">🏪</span>
+          <span class="card-title">Layer 1 — Promo Boutik</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#F97316"></div>
+            <div>
+              <div class="item-name">Walgreens</div>
+              <div class="item-detail">walgreens.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-gold">BOGO + 20% off</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#EF4444"></div>
+            <div>
+              <div class="item-name">CVS Pharmacy</div>
+              <div class="item-detail">cvs.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-gold">ExtraCare + BOGO</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#3B82F6"></div>
+            <div>
+              <div class="item-name">Walmart</div>
+              <div class="item-detail">walmart.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-gold">Rollback + Clearance</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#F59E0B"></div>
+            <div>
+              <div class="item-name">Target</div>
+              <div class="item-detail">target.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-gold">Circle + Buy 2 Get 1</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#10B981"></div>
+            <div>
+              <div class="item-name">Vitacost</div>
+              <div class="item-detail">vitacost.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-gold">20–40% off regilye</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#8B5CF6"></div>
+            <div>
+              <div class="item-name">iHerb</div>
+              <div class="item-detail">iherb.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-gold">Kòd promo aktif</span>
+        </div>
+      </div>
+
+      <!-- LAYER 2: NEWSLETTER -->
+      <div class="card green">
+        <div class="card-head">
+          <span class="card-ico">📧</span>
+          <span class="card-title">Layer 2 — Newsletter & Alèt</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#34D399"></div>
+            <div>
+              <div class="item-name">Walgreens Emails</div>
+              <div class="item-detail">Enskri sou walgreens.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-green">Site-wide 20%</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#34D399"></div>
+            <div>
+              <div class="item-name">CVS ExtraCare Email</div>
+              <div class="item-detail">Enskri sou cvs.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-green">Koupòn pèsonèl</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#34D399"></div>
+            <div>
+              <div class="item-name">Target Circle</div>
+              <div class="item-detail">App Target</div>
+            </div>
+          </div>
+          <span class="item-badge badge-green">5% + ofri espesyal</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#34D399"></div>
+            <div>
+              <div class="item-name">Honey / Capital One</div>
+              <div class="item-detail">Extension navigatè</div>
+            </div>
+          </div>
+          <span class="item-badge badge-green">Kòd otomatik</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#34D399"></div>
+            <div>
+              <div class="item-name">RetailMeNot</div>
+              <div class="item-detail">retailmenot.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-green">Koupòn regilyè</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#34D399"></div>
+            <div>
+              <div class="item-name">SlickDeals</div>
+              <div class="item-detail">slickdeals.net</div>
+            </div>
+          </div>
+          <span class="item-badge badge-green">Alèt deal aktif</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── LAYER 3 + 4 ── -->
+    <div class="grid">
+
+      <!-- LAYER 3: GIFT CARDS -->
+      <div class="card blue">
+        <div class="card-head">
+          <span class="card-ico">🎁</span>
+          <span class="card-title">Layer 3 — Kat Kado Redui</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#60A5FA"></div>
+            <div>
+              <div class="item-name">CardBear</div>
+              <div class="item-detail">cardbear.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-blue">Jiska 11% off</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#60A5FA"></div>
+            <div>
+              <div class="item-name">Raise</div>
+              <div class="item-detail">raise.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-blue">Jiska 15% off</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#60A5FA"></div>
+            <div>
+              <div class="item-name">GiftCards.com</div>
+              <div class="item-detail">giftcards.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-blue">Promo regilyè</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#60A5FA"></div>
+            <div>
+              <div class="item-name">CardCash</div>
+              <div class="item-detail">cardcash.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-blue">Jiska 35% off</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#60A5FA"></div>
+            <div>
+              <div class="item-name">Sam's Club / Costco</div>
+              <div class="item-detail">Kat kado redui</div>
+            </div>
+          </div>
+          <span class="item-badge badge-blue">5–8% off</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#60A5FA"></div>
+            <div>
+              <div class="item-name">eBay Gift Cards</div>
+              <div class="item-detail">ebay.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-blue">Varyab — chèke</span>
+        </div>
+      </div>
+
+      <!-- LAYER 4: CASHBACK -->
+      <div class="card purple">
+        <div class="card-head">
+          <span class="card-ico">💸</span>
+          <span class="card-title">Layer 4 — Cashback</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#A78BFA"></div>
+            <div>
+              <div class="item-name">BeFrugal</div>
+              <div class="item-detail">befrugal.com ⭐ Preferans</div>
+            </div>
+          </div>
+          <span class="item-badge badge-purple">Jiska 10%</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#A78BFA"></div>
+            <div>
+              <div class="item-name">Rakuten</div>
+              <div class="item-detail">rakuten.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-purple">3–8% mwayèn</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#A78BFA"></div>
+            <div>
+              <div class="item-name">TopCashback</div>
+              <div class="item-detail">topcashback.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-purple">Pi wo nan mache</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#A78BFA"></div>
+            <div>
+              <div class="item-name">Ibotta</div>
+              <div class="item-detail">ibotta.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-purple">Pwodui espesifik</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#A78BFA"></div>
+            <div>
+              <div class="item-name">Swagbucks</div>
+              <div class="item-detail">swagbucks.com</div>
+            </div>
+          </div>
+          <span class="item-badge badge-purple">1–5% + SB pwen</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#A78BFA"></div>
+            <div>
+              <div class="item-name">Chase Sapphire / Amex</div>
+              <div class="item-detail">Kat kredi pwen</div>
+            </div>
+          </div>
+          <span class="item-badge badge-purple">1.5–5× pwen</span>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── LAYER 5: TIMING ── -->
+    <div class="grid-3">
+      <div class="card pink">
+        <div class="card-head">
+          <span class="card-ico">📅</span>
+          <span class="card-title">Layer 5 — Timing Mache</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#F9A8D4"></div>
+            <div><div class="item-name">Jou Ferye Ameriken</div></div>
+          </div>
+          <span class="item-badge badge-pink">+20–40%</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#F9A8D4"></div>
+            <div><div class="item-name">Lannde / New Year</div></div>
+          </div>
+          <span class="item-badge badge-pink">Gwo vant</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#F9A8D4"></div>
+            <div><div class="item-name">Back to School</div></div>
+          </div>
+          <span class="item-badge badge-pink">Jiyè–Septanm</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#F9A8D4"></div>
+            <div><div class="item-name">FBA Seller Kite</div></div>
+          </div>
+          <span class="item-badge badge-pink">Verifye Keepa</span>
+        </div>
+      </div>
+
+      <div class="card teal">
+        <div class="card-head">
+          <span class="card-ico">📊</span>
+          <span class="card-title">Mercury / Keepa Filters</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#2DD4BF"></div>
+            <div><div class="item-name">FBA &lt; 2 vendè</div></div>
+          </div>
+          <span class="item-badge badge-teal">Low Competition</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#2DD4BF"></div>
+            <div><div class="item-name">Seller count ↓</div></div>
+          </div>
+          <span class="item-badge badge-teal">Decreasing</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#2DD4BF"></div>
+            <div><div class="item-name">Buy Box ↑</div></div>
+          </div>
+          <span class="item-badge badge-teal">Price Rising</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:#2DD4BF"></div>
+            <div><div class="item-name">50+ vant/mwa</div></div>
+          </div>
+          <span class="item-badge badge-teal">Good Velocity</span>
+        </div>
+      </div>
+
+      <div class="card gold" style="background:rgba(245,166,35,0.05);border-color:rgba(245,166,35,0.25);">
+        <div class="card-head">
+          <span class="card-ico">🏆</span>
+          <span class="card-title">Règ Ò — Pou Sonje</span>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:var(--gold)"></div>
+            <div><div class="item-name" style="font-size:0.75rem;">Toujou achte nan boutik otorize</div></div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:var(--gold)"></div>
+            <div><div class="item-name" style="font-size:0.75rem;">Stack 3–4 layer chak fwa</div></div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:var(--gold)"></div>
+            <div><div class="item-name" style="font-size:0.75rem;">Verifye cashback anvan ou klike</div></div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:var(--gold)"></div>
+            <div><div class="item-name" style="font-size:0.75rem;">Yon lead pa mouri — monte baz done</div></div>
+          </div>
+        </div>
+        <div class="item">
+          <div class="item-left">
+            <div class="item-dot" style="background:var(--gold)"></div>
+            <div><div class="item-name" style="font-size:0.75rem;">Ignore lowball vendè si velocity bon</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- ── TIPS ── -->
+    <div class="tips-grid">
+      <div class="tip">
+        <span class="tip-ico">📱</span>
+        <div class="tip-text">
+          <strong>Email Dedye</strong>
+          Kreye yon imèl separe pou tout newsletter boutik yo. Tcheke li chak maten pou w pa rate deal yo.
+        </div>
+      </div>
+      <div class="tip">
+        <span class="tip-ico">🔔</span>
+        <div class="tip-text">
+          <strong>Alèt Keepa</strong>
+          Mete alèt sou chak ASIN nan baz done ou. Lè pri a monte oswa competition bese — ou resevwa notifikasyon.
+        </div>
+      </div>
+      <div class="tip">
+        <span class="tip-ico">💡</span>
+        <div class="tip-text">
+          <strong>Pri Plen = Opòtinite</strong>
+          Parfwa achte nan pri plen (pa sou vant) pi pwofitab si competition trè ba.
+        </div>
+      </div>
+    </div>
+
+  </div>
+
+  <!-- ── FOOTER ── -->
+  <div class="footer">
+    <span class="fl">© 2026 E Pelissier Enterprises · 30 Jou Amazon Challenge · Konfidansyèl — Pa Distribye</span>
+    <span class="fr">epelissierenterprise.com</span>
+  </div>
+
+</div>
+
+<script>
+function printSheet() {
+  const sheet = document.querySelector('.sheet');
+  const win = window.open('', '_blank', 'width=1000,height=800');
+  win.document.write('<html><head><title>Discount Stacking Cheat Sheet</title>');
+  // Copy all styles
+  const styles = document.querySelectorAll('style, link[rel="stylesheet"]');
+  styles.forEach(s => win.document.write(s.outerHTML));
+  win.document.write('<style>body{background:#08111F;padding:0;margin:0;}@media print{body{background:#fff;}}</style>');
+  win.document.write('</head><body>');
+  win.document.write(sheet.outerHTML);
+  win.document.write('</body></html>');
+  win.document.close();
+  win.focus();
+  setTimeout(() => { win.print(); }, 800);
+}
+</script>
+</body>
+</html>
